@@ -24,6 +24,7 @@
         <EditText
             android:id="@+id/et_username"
             android:layout_width="0dp"
+            android:padding="3dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:text="wodx521"
@@ -56,6 +57,7 @@
         <EditText
             android:id="@+id/et_password"
             android:layout_width="0dp"
+            android:padding="3dp"
             android:text="AXjJTUqOI7d9RTU3R_dE"
             android:layout_height="wrap_content"
             android:layout_weight="3"

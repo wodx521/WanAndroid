@@ -58,7 +58,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenterImpl> implement
                     httpParams.clear();
                     httpParams.put("username", userName);
                     httpParams.put("password", password);
-                    mPresenter.loginOperate1(UrlConstant.BASEURL + "/user/login", httpParams);
+                    mPresenter.loginOperate(UrlConstant.BASEURL + "/user/login", httpParams);
                 } else {
                     if (!UiTools.noEmpty(userName)) {
                         UiTools.showToast("请输入用户名");
@@ -76,5 +76,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenterImpl> implement
 
     public void setLoginSuccess() {
         startActivity(this, null, MainActivity.class);
+        finish();
     }
 }
