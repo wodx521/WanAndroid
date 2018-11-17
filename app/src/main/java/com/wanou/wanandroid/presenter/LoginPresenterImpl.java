@@ -10,7 +10,7 @@ import com.wanou.framelibrary.okgoutil.CustomizeStringCallback;
 import com.wanou.framelibrary.okgoutil.OkGoUtils;
 import com.wanou.framelibrary.utils.GsonUtils;
 import com.wanou.framelibrary.utils.UiTools;
-import com.wanou.wanandroid.activity.LoginActivity;
+import com.wanou.wanandroid.view.activity.LoginActivity;
 import com.wanou.wanandroid.bean.LoginBean;
 
 /**

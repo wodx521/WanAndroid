@@ -1,4 +1,4 @@
-package com.wanou.wanandroid.activity;
+package com.wanou.wanandroid.view.activity;
 
 import android.view.View;
 import android.widget.Button;

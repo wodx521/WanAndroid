@@ -1,4 +1,4 @@
-package com.wanou.wanandroid.activity;
+package com.wanou.wanandroid.view.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
