@@ -1,15 +1,17 @@
 package com.wanou.wanandroid.view.fragment;
 
 import android.view.View;
-import com.wanou.framelibrary.base.BaseFragment;
+
+import com.wanou.framelibrary.base.BaseMvpFragment;
 import com.wanou.framelibrary.utils.LogUtils;
 import com.wanou.wanandroid.R;
+import com.wanou.wanandroid.presenter.FivePresenterImpl;
 
 /**
  * Author by wodx521
  * Date on 2018/11/10.
  */
-public class FiveMainFragment extends BaseFragment {
+public class FiveMainFragment extends BaseMvpFragment<FivePresenterImpl> {
     @Override
     protected int getResId() {
         return R.layout.fragment_five_main;
@@ -33,5 +35,10 @@ public class FiveMainFragment extends BaseFragment {
         }else{
             LogUtils.e("第五个fragment显示了");
         }
+    }
+
+    @Override
+    protected FivePresenterImpl getPresenter() {
+        return new FivePresenterImpl();
     }
 }

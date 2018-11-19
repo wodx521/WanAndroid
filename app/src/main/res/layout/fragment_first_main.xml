@@ -2,17 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="第一页"
-        android:textColor="@color/colorAccent" />
+    <com.youth.banner.Banner
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        app:delay_time="2000"
+        app:is_auto_play="true"
+        app:banner_default_image="@drawable/default_banner"
+        android:layout_height="250dp" />
 
     <Button
         android:id="@+id/bt_jump"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="跳转新页面" />
+
 </LinearLayout>

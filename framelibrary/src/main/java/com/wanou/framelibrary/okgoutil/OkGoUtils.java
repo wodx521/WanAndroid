@@ -41,11 +41,25 @@ public class OkGoUtils {
                 .init(application);
     }
 
-    public static void getRequest(String url, Object tag, HttpParams httpParams, StringCallback stringCallback) {
-        OkGo.<String>get(url)
-                .tag(tag)
-                .params(httpParams)
-                .execute(stringCallback);
+    public static void getRequest(String url, Object tag, Object httpParams, StringCallback stringCallback) {
+        if (httpParams == null) {
+            OkGo.<String>get(url)
+                    .tag(tag)
+                    .execute(stringCallback);
+        } else {
+            if (httpParams instanceof HttpParams) {
+                OkGo.<String>get(url)
+                        .tag(tag)
+                        .params((HttpParams) httpParams)
+                        .execute(stringCallback);
+            }
+            if (httpParams instanceof Map) {
+                OkGo.<String>get(url)
+                        .tag(tag)
+                        .params((Map<String, String>) httpParams)
+                        .execute(stringCallback);
+            }
+        }
     }
 
     public static void postRequest(String url, Object tag, Object objParams, StringCallback stringCallback) {
