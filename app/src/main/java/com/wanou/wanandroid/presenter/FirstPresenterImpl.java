@@ -11,6 +11,7 @@ import com.wanou.framelibrary.okgoutil.OkGoUtils;
 import com.wanou.framelibrary.utils.GsonUtils;
 import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.bean.BannerBean;
+import com.wanou.wanandroid.bean.TabListBean;
 import com.wanou.wanandroid.view.fragment.FirstMainFragment;
 
 import java.util.List;
@@ -58,4 +59,40 @@ public class FirstPresenterImpl extends BasePresenterImpl<FirstMainFragment> {
         });
     }
 
+    public void getTabListInfo(String url, HttpParams httpParams) {
+        OkGoUtils.getRequest(url, "tab_list", httpParams, new CustomizeStringCallback() {
+            @Override
+            public GeneralResult getGeneralResult(String result) {
+                return GsonUtils.fromJson(result, new TypeToken<GeneralResult<TabListBean>>() {
+                }.getType());
+            }
+
+            @Override
+            public void onRequestSuccess(SimpleResponse simpleResponse, GeneralResult generalResult) {
+                if (generalResult != null) {
+                    TabListBean tabListBean = (TabListBean) generalResult.data;
+                    mPresenterView.setTabSuccess(tabListBean);
+                } else {
+                    if (UiTools.noEmpty(simpleResponse.msg)) {
+                        UiTools.showToast(simpleResponse.msg);
+                    }
+                }
+            }
+
+            @Override
+            public void onRequestError(Throwable exception) {
+
+            }
+
+            @Override
+            public void onRequestStart(Request<String, ? extends Request> request) {
+
+            }
+
+            @Override
+            public void onRequestFinish() {
+
+            }
+        });
+    }
 }

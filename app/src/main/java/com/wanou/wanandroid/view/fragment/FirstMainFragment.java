@@ -1,15 +1,21 @@
 package com.wanou.wanandroid.view.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.wanou.framelibrary.base.BaseMvpFragment;
+import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.bean.BannerBean;
+import com.wanou.wanandroid.bean.TabListBean;
 import com.wanou.wanandroid.commontools.BannerLoader;
 import com.wanou.wanandroid.constant.UrlConstant;
 import com.wanou.wanandroid.presenter.FirstPresenterImpl;
 import com.wanou.wanandroid.view.activity.BannerDetailActivity;
+import com.wanou.wanandroid.view.adapter.TabListAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -22,11 +28,15 @@ import java.util.List;
  * Author by wodx521
  * Date on 2018/11/10.
  */
-public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> {
+public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> implements TabLayout.OnTabSelectedListener {
     private Banner mBanner;
     private List<String> imageUrl = new ArrayList<>();
     private List<String> titles = new ArrayList<>();
     private Bundle bundle = new Bundle();
+    private TabLayout mTlbHomeTab;
+    private SmartRefreshLayout mSrlRefresh;
+    private RecyclerView mRvHomeList;
+    private String[] homeTab = UiTools.getStringArray(R.array.home_tab);
 
     @Override
     protected int getResId() {
@@ -36,13 +46,24 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> {
     @Override
     protected void initView(View view) {
         mBanner = view.findViewById(R.id.banner);
-
+        mTlbHomeTab = view.findViewById(R.id.tlb_home_tab);
+        mSrlRefresh = view.findViewById(R.id.srl_refresh);
+        mRvHomeList = view.findViewById(R.id.rv_home_list);
     }
 
     @Override
     protected void initData() {
         initBanner();
         mPresenter.getBannerInfo(UrlConstant.BASEURL + "/banner/json", null);
+        for (String tabContent : homeTab) {
+            mTlbHomeTab.addTab(mTlbHomeTab.newTab().setText(tabContent));
+        }
+        mTlbHomeTab.addOnTabSelectedListener(this);
+        mTlbHomeTab.getTabAt(0).select();
+
+        TabListAdapter tabListAdapter =  new TabListAdapter(getActivity());
+
+        mRvHomeList.setAdapter(tabListAdapter);
     }
 
     @Override
@@ -61,6 +82,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> {
 
     public void setBannerList(List<BannerBean> bannerBeanList) {
         imageUrl.clear();
+        titles.clear();
         if (bannerBeanList != null && bannerBeanList.size() > 0) {
             for (BannerBean bannerBean : bannerBeanList) {
                 imageUrl.add(bannerBean.getImagePath());
@@ -68,8 +90,6 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> {
             }
             mBanner.setImages(imageUrl);
             mBanner.setBannerTitles(titles);
-            mBanner.start();
-
             mBanner.setOnBannerListener(new OnBannerListener() {
                 @Override
                 public void OnBannerClick(int position) {
@@ -80,6 +100,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> {
                     BannerDetailActivity.startActivity(getActivity(), bundle, BannerDetailActivity.class);
                 }
             });
+            mBanner.start();
         }
     }
 
@@ -102,5 +123,38 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> {
     public void onStop() {
         super.onStop();
         mBanner.stopAutoPlay();
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        String url;
+        if (tab.getPosition() == 0) {
+            url = UrlConstant.BASEURL + "/article/list/0/json";
+        } else {
+            url = UrlConstant.BASEURL + "/article/listproject/0/json";
+        }
+        mPresenter.getTabListInfo(url, null);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+        String url;
+        if (tab.getPosition() == 0) {
+            url = UrlConstant.BASEURL + "/article/list/0/json";
+        } else {
+            url = UrlConstant.BASEURL + "/article/listproject/0/json";
+        }
+        mPresenter.getTabListInfo(url, null);
+    }
+
+
+    public void setTabSuccess(TabListBean tabListBean) {
+
+
     }
 }

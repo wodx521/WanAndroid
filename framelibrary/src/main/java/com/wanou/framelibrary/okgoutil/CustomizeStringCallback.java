@@ -48,7 +48,6 @@ public abstract class CustomizeStringCallback extends StringCallback {
 
     @Override
     public void onError(Response<String> response) {
-        super.onError(response);
         Throwable exception = response.getException();
         if (exception instanceof UnknownHostException || exception instanceof ConnectException) {
             UiTools.showToast(UiTools.getString(R.string.connect_fail));
@@ -57,6 +56,7 @@ public abstract class CustomizeStringCallback extends StringCallback {
         } else {
             UiTools.showToast(UiTools.getString(R.string.server_error));
         }
+        exception.printStackTrace();
         onRequestError(exception);
     }
 
