@@ -7,5 +7,9 @@
     <string name="title_mine">我的</string>
 
     <string name="bottom_behavior">com.wanou.wanandroid.behavior.BottomNavigationBehavior.java</string>
+    <string name="publish_time">时间：</string>
+    <string name="separator">/</string>
+    <string name="classification">分类：</string>
+    <string name="author">作者：</string>
 
 </resources>

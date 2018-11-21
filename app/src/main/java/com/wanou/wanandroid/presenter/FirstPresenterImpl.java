@@ -3,6 +3,7 @@ package com.wanou.wanandroid.presenter;
 import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.request.base.Request;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.wanou.framelibrary.base.BasePresenterImpl;
 import com.wanou.framelibrary.bean.GeneralResult;
 import com.wanou.framelibrary.bean.SimpleResponse;
@@ -10,6 +11,7 @@ import com.wanou.framelibrary.okgoutil.CustomizeStringCallback;
 import com.wanou.framelibrary.okgoutil.OkGoUtils;
 import com.wanou.framelibrary.utils.GsonUtils;
 import com.wanou.framelibrary.utils.UiTools;
+import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.bean.BannerBean;
 import com.wanou.wanandroid.bean.TabListBean;
 import com.wanou.wanandroid.view.fragment.FirstMainFragment;
@@ -21,6 +23,7 @@ import java.util.List;
  * Date on 2018/11/13.
  */
 public class FirstPresenterImpl extends BasePresenterImpl<FirstMainFragment> {
+    private SmartRefreshLayout srlRefresh;
 
     public void getBannerInfo(String url, HttpParams httpParams) {
         OkGoUtils.getRequest(url, "banner", httpParams, new CustomizeStringCallback() {
@@ -86,12 +89,15 @@ public class FirstPresenterImpl extends BasePresenterImpl<FirstMainFragment> {
 
             @Override
             public void onRequestStart(Request<String, ? extends Request> request) {
-
+                srlRefresh = mPresenterView.getView().findViewById(R.id.srl_refresh);
             }
 
             @Override
             public void onRequestFinish() {
-
+                if (srlRefresh.isRefreshing() || srlRefresh.isLoading()) {
+                    srlRefresh.finishRefresh();
+                    srlRefresh.finishLoadMore();
+                }
             }
         });
     }

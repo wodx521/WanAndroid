@@ -1,5 +1,7 @@
 package com.wanou.wanandroid;
 
+import android.content.Context;
+
 import com.wanou.framelibrary.GlobalApplication;
 
 /**
@@ -11,4 +13,10 @@ public class MyApp extends GlobalApplication {
     public void onCreate() {
         super.onCreate();
     }
+
+    @Override
+    protected Context getAppContext() {
+        return this;
+    }
+
 }

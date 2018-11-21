@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.wanou.framelibrary.base.BaseMvpFragment;
 import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
@@ -37,6 +39,9 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
     private SmartRefreshLayout mSrlRefresh;
     private RecyclerView mRvHomeList;
     private String[] homeTab = UiTools.getStringArray(R.array.home_tab);
+    private List<TabListBean.DatasBean> tempDataLists = new ArrayList<>();
+    private TabListAdapter tabListAdapter;
+    private int page = 0;
 
     @Override
     protected int getResId() {
@@ -61,7 +66,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         mTlbHomeTab.addOnTabSelectedListener(this);
         mTlbHomeTab.getTabAt(0).select();
 
-        TabListAdapter tabListAdapter =  new TabListAdapter(getActivity());
+        tabListAdapter = new TabListAdapter(getActivity());
 
         mRvHomeList.setAdapter(tabListAdapter);
     }
@@ -127,6 +132,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        tempDataLists.clear();
         String url;
         if (tab.getPosition() == 0) {
             url = UrlConstant.BASEURL + "/article/list/0/json";
@@ -144,6 +150,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
         String url;
+        tempDataLists.clear();
         if (tab.getPosition() == 0) {
             url = UrlConstant.BASEURL + "/article/list/0/json";
         } else {
@@ -154,7 +161,38 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
 
 
     public void setTabSuccess(TabListBean tabListBean) {
+        List<TabListBean.DatasBean> datas = tabListBean.getDatas();
+        tempDataLists.addAll(datas);
+        tabListAdapter.setDatas(tempDataLists);
+        tabListAdapter.notifyDataSetChanged();
+        if (tabListBean.getCurPage() == tabListBean.getPageCount()) {
+            mSrlRefresh.setEnableLoadMore(false);
+        } else {
+            mSrlRefresh.setEnableLoadMore(true);
+        }
+        mSrlRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+                page += 1;
+                String url;
+                switch (mTlbHomeTab.getSelectedTabPosition()) {
+                    case 0:
+                        url = UrlConstant.BASEURL + "/article/list/" + page + "/json";
+                        break;
+                    case 1:
+                    default:
+                        url = UrlConstant.BASEURL + "/article/listproject/" + page + "/json";
+                        break;
+                }
+                mPresenter.getTabListInfo(url, null);
+            }
 
-
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                page = 0;
+                tempDataLists.clear();
+                mTlbHomeTab.getTabAt(mTlbHomeTab.getSelectedTabPosition()).select();
+            }
+        });
     }
 }

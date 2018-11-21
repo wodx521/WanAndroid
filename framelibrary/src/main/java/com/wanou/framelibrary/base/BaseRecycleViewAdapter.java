@@ -23,29 +23,28 @@ public abstract class BaseRecycleViewAdapter extends RecyclerView.Adapter<Recycl
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = inflater.inflate(getItemRes(), viewGroup, false);
-        return new BaseViewHolder(view);
+        return getViewHolder(view);
     }
-
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(this);
         holder.itemView.setOnLongClickListener(this);
-        bindClickListener(holder,position);
+        bindClickListener(holder, position);
     }
+
+    protected abstract int getItemRes();
 
     //绑定点击监听事件
     protected abstract void bindClickListener(RecyclerView.ViewHolder viewHolder, int position);
 
-    protected abstract int getItemRes();
+    protected abstract RecyclerView.ViewHolder getViewHolder(View view);
 
     public void setSelect(int position) {
         this.defItem = position;
         notifyDataSetChanged();
     }
-
 
     public int getSelect() {
         return defItem;
@@ -85,9 +84,4 @@ public abstract class BaseRecycleViewAdapter extends RecyclerView.Adapter<Recycl
         boolean onItemLongClickListener(View view, int position);
     }
 
-   private class BaseViewHolder extends RecyclerView.ViewHolder{
-        public BaseViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-    }
 }

@@ -16,14 +16,18 @@
         android:id="@+id/tlb_home_tab"
         style="@style/home_tab_style"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/shape_frame_blue" />
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
 
-        <com.scwang.smartrefresh.layout.header.FalsifyHeader
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -33,7 +37,7 @@
             android:layout_height="wrap_content"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
-        <com.scwang.smartrefresh.layout.footer.FalsifyFooter
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
