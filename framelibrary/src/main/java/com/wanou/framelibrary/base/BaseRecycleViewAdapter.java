@@ -34,12 +34,14 @@ public abstract class BaseRecycleViewAdapter extends RecyclerView.Adapter<Recycl
         bindClickListener(holder, position);
     }
 
+    //设置布局文件
     protected abstract int getItemRes();
+
+    //获取viewholder
+    protected abstract RecyclerView.ViewHolder getViewHolder(View view);
 
     //绑定点击监听事件
     protected abstract void bindClickListener(RecyclerView.ViewHolder viewHolder, int position);
-
-    protected abstract RecyclerView.ViewHolder getViewHolder(View view);
 
     public void setSelect(int position) {
         this.defItem = position;

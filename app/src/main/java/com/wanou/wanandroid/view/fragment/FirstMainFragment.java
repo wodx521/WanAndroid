@@ -161,9 +161,10 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
 
 
     public void setTabSuccess(TabListBean tabListBean) {
+        int selectedTabPosition = mTlbHomeTab.getSelectedTabPosition();
         List<TabListBean.DatasBean> datas = tabListBean.getDatas();
         tempDataLists.addAll(datas);
-        tabListAdapter.setDatas(tempDataLists);
+        tabListAdapter.setDatas(tempDataLists,selectedTabPosition);
         tabListAdapter.notifyDataSetChanged();
         if (tabListBean.getCurPage() == tabListBean.getPageCount()) {
             mSrlRefresh.setEnableLoadMore(false);

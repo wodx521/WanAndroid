@@ -18,7 +18,8 @@ import java.util.List;
  * Date on 2018/11/20.
  */
 public class TabListAdapter extends BaseRecycleViewAdapter {
-    List<TabListBean.DatasBean> datas;
+    private List<TabListBean.DatasBean> datas;
+    private int selectedTabPosition;
 
     public TabListAdapter(Context context) {
         super(context);
@@ -29,8 +30,9 @@ public class TabListAdapter extends BaseRecycleViewAdapter {
         return R.layout.item_tab_info;
     }
 
-    public void setDatas(List<TabListBean.DatasBean> datas) {
+    public void setDatas(List<TabListBean.DatasBean> datas, int selectedTabPosition) {
         this.datas = datas;
+        this.selectedTabPosition = selectedTabPosition;
     }
 
     @Override
@@ -45,19 +47,16 @@ public class TabListAdapter extends BaseRecycleViewAdapter {
         tabListViewHolder.mTvClassification.setText(datasBean.getSuperChapterName()
                 + File.separator + datasBean.getChapterName());
         tabListViewHolder.mTvPublishTime.setText(datasBean.getNiceDate());
-        if (tags.size() > 0) {
-            tabListViewHolder.mTvType.setVisibility(View.VISIBLE);
-            tabListViewHolder.mTvType.setText(tags.get(0).getName());
-            tabListViewHolder.mTvType.setBackgroundResource(R.drawable.shape_frame_green);
-        } else {
-            tabListViewHolder.mTvType.setVisibility(View.GONE);
-        }
 
-        if (chapterId == 79) {
-            tabListViewHolder.mTvType.setVisibility(View.VISIBLE);
-            tabListViewHolder.mTvType.setText("热门");
-            tabListViewHolder.mTvType.setBackgroundResource(R.drawable.shape_frame_red);
-        }else{
+        if (selectedTabPosition == 0) {
+            if (tags.size() > 0) {
+                tabListViewHolder.mTvType.setVisibility(View.VISIBLE);
+                tabListViewHolder.mTvType.setText(tags.get(0).getName());
+                tabListViewHolder.mTvType.setBackgroundResource(R.drawable.shape_frame_green);
+            } else {
+                tabListViewHolder.mTvType.setVisibility(View.GONE);
+            }
+        } else {
             tabListViewHolder.mTvType.setVisibility(View.GONE);
         }
     }
