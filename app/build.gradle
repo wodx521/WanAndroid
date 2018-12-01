@@ -59,4 +59,32 @@ dependencies {
     //smartrefresh刷新功能
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5'
+
+    //图片加载框架
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    // If you want to use the GPU Filters
+    //    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
+    //底部导航栏
+    implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.4'
+    //宽度自适应的textview
+    implementation 'me.codeboy.android:align-text-view:2.3.2'
+
+    //微信分享集成
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    //图片选择框架
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
+
+    //HelloChart
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    //自适应textview
+    implementation 'me.grantland:autofittextview:0.2.+'
+    //对齐textview
+    implementation 'me.codeboy.android:align-text-view:2.3.2'
+//
+    //mpchart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+//
+    //使用自动缩放imageview
+    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 }

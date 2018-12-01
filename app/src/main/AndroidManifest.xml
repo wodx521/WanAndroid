@@ -14,8 +14,9 @@
         android:label="@string/app_name_main"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/BaseTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        android:theme="@style/BaseThemeOne"
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:theme">
         <activity android:name=".view.activity.SplashActivity">
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -30,8 +31,9 @@
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".view.activity.MainActivity"
-            android:theme="@style/BaseTheme">
+        <activity
+            android:name=".view.activity.MainActivity"
+            android:theme="@style/BaseThemeOne">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

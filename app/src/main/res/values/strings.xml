@@ -12,4 +12,7 @@
     <string name="classification">分类：</string>
     <string name="author">作者：</string>
 
+    <string name="open">开</string>
+    <string name="close">关</string>
+
 </resources>

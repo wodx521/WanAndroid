@@ -3,10 +3,12 @@ package com.wanou.wanandroid.view.fragment;
 import android.view.View;
 import android.widget.TextView;
 
-import com.wanou.framelibrary.base.BaseFragment;
+import com.wanou.framelibrary.base.BaseMvpFragment;
 import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.bean.SystemBean;
+import com.wanou.wanandroid.constant.UrlConstant;
+import com.wanou.wanandroid.presenter.LeftFragmentPresenterImpl;
 import com.wanou.wanandroid.weight.FlowLayout;
 
 import java.util.List;
@@ -15,12 +17,15 @@ import java.util.List;
  * Author by wodx521
  * Date on 2018/11/22.
  */
-public class LeftFragment extends BaseFragment {
+public class LeftFragment extends BaseMvpFragment<LeftFragmentPresenterImpl> {
     private List<SystemBean> systemBeanList;
-    //    private ChipGroup mCgGroup1;
-//    private ChipGroup mCgGroup2;
     private FlowLayout mFlLayout1;
     private FlowLayout mFlLayout2;
+
+    @Override
+    protected LeftFragmentPresenterImpl getPresenter() {
+        return new LeftFragmentPresenterImpl();
+    }
 
     @Override
     protected int getResId() {
@@ -33,8 +38,6 @@ public class LeftFragment extends BaseFragment {
 
     @Override
     protected void initView(View view) {
-//        mCgGroup1 = view.findViewById(R.id.cg_group1);
-//        mCgGroup2 = view.findViewById(R.id.cg_group2);
         mFlLayout1 = view.findViewById(R.id.fl_layout1);
         mFlLayout2 = view.findViewById(R.id.fl_layout2);
     }
@@ -83,11 +86,16 @@ public class LeftFragment extends BaseFragment {
                                             v.setSelected(true);
                                             v.setClickable(false);
                                             ((TextView) v).setTextColor(UiTools.getColor(R.color.white_color));
+
                                             for (int i1 = 0; i1 < mFlLayout2.getChildCount(); i1++) {
                                                 TextView childAt1 = (TextView) mFlLayout2.getChildAt(i1);
                                                 if (childAt1.getText().equals(((TextView) v).getText().toString())) {
                                                     // TODO: 2018/11/22 这里添加具体列表的代码
                                                     UiTools.showToast("charat" + childAt.getText().toString() + "~~~~charat1" + childAt1.getText().toString());
+//                                                    http://www.wanandroid.com/article/list/0/json?cid=60
+                                                    int id = children.get(i1).getId();
+                                                    String url = UrlConstant.BASEURL + "/article/list/" + 0 + "/json?cid=" + id;
+                                                    mPresenter.getSystemContentList(url);
                                                     continue;
                                                 }
                                                 childAt1.setSelected(false);
@@ -108,68 +116,8 @@ public class LeftFragment extends BaseFragment {
                 });
                 mFlLayout1.addView(textView1);
             }
-
-            for (int i = 0; i < mFlLayout1.getChildCount(); i++) {
-                View childAt = mFlLayout1.getChildAt(i);
-                if (childAt.isSelected()) {
-                    SystemBean systemBean = systemBeanList.get(i);
-                    List<SystemBean.ChildrenBean> children = systemBean.getChildren();
-
-                }
-            }
-
-//            for (SystemBean systemBean : systemBeanList) {
-//                Chip chip = new Chip(getActivity());
-//                chip.setText(systemBean.getName());
-//                chip.setTextColor(UiTools.getColor(R.color.blue_color));
-//                ChipDrawable chipDrawable = (ChipDrawable) chip.getChipDrawable();
-//                chipDrawable.setCheckable(false);
-//                chipDrawable.setCheckedIconVisible(false);
-//                chip.setChipDrawable(chipDrawable);
-//                mCgGroup1.addView(chip);
-//            }
-//
-//            mCgGroup1.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(ChipGroup chipGroup, int i) {
-//                    if (i != -1) {
-//                        for (int i1 = 0; i1 < mCgGroup1.getChildCount(); i1++) {
-//                            mCgGroup1.getChildAt(i1).setSelected(false);
-//                        }
-//                        Chip chip1 = (Chip) chipGroup.getChildAt(i - 1);
-//                        chip1.setSelected(true);
-//
-//                        UiTools.showToast("选中改变了" + chipGroup.getCheckedChipId() + "~~~~~" + i);
-//                        mCgGroup2.removeAllViews();
-//                        SystemBean systemBean = systemBeanList.get(i - 1);
-//                        List<SystemBean.ChildrenBean> children = systemBean.getChildren();
-//                        for (SystemBean.ChildrenBean child : children) {
-//                            Chip chip = new Chip(getActivity());
-//                            chip.setText(child.getName());
-//                            chip.setTextColor(UiTools.getColor(R.color.blue_color));
-//                            ChipDrawable chipDrawable = (ChipDrawable) chip.getChipDrawable();
-//                            chipDrawable.setCheckable(true);
-//                            chipDrawable.setCheckedIconVisible(false);
-//                            chipDrawable.setCloseIconVisible(false);
-//                            chip.setChipDrawable(chipDrawable);
-//                            mCgGroup2.addView(chip);
-//                        }
-//
-//                        mCgGroup2.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-//                            @Override
-//                            public void onCheckedChanged(ChipGroup chipGroup1, int i1) {
-////                                if (i != -1) {
-////                                    UiTools.showToast(systemBean.getName() + children.get(i - systemBeanList.size() - 1).getName());
-////                                }
-////                                i-systemBeanList.size()
-//                                LogUtils.e("chipgroup" + chipGroup1.getCheckedChipId() + "~~~~i1" + i1);
-//                            }
-//                        });
-//                    }
-//                }
-//            });
-//
-//            mCgGroup1.check(mCgGroup1.getChildAt(0).getId());
         }
     }
+
+
 }
