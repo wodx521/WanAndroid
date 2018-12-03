@@ -132,14 +132,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        tempDataLists.clear();
-        String url;
-        if (tab.getPosition() == 0) {
-            url = UrlConstant.BASEURL + "/article/list/0/json";
-        } else {
-            url = UrlConstant.BASEURL + "/article/listproject/0/json";
-        }
-        mPresenter.getTabListInfo(url, null);
+        tabSelect(tab);
     }
 
     @Override
@@ -149,14 +142,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-        String url;
-        tempDataLists.clear();
-        if (tab.getPosition() == 0) {
-            url = UrlConstant.BASEURL + "/article/list/0/json";
-        } else {
-            url = UrlConstant.BASEURL + "/article/listproject/0/json";
-        }
-        mPresenter.getTabListInfo(url, null);
+        tabSelect(tab);
     }
 
 
@@ -164,7 +150,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         int selectedTabPosition = mTlbHomeTab.getSelectedTabPosition();
         List<TabListBean.DatasBean> datas = tabListBean.getDatas();
         tempDataLists.addAll(datas);
-        tabListAdapter.setDatas(tempDataLists,selectedTabPosition);
+        tabListAdapter.setDatas(tempDataLists, selectedTabPosition);
         tabListAdapter.notifyDataSetChanged();
         if (tabListBean.getCurPage() == tabListBean.getPageCount()) {
             mSrlRefresh.setEnableLoadMore(false);
@@ -195,5 +181,16 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
                 mTlbHomeTab.getTabAt(mTlbHomeTab.getSelectedTabPosition()).select();
             }
         });
+    }
+
+    private void tabSelect(TabLayout.Tab tab) {
+        String url;
+        tempDataLists.clear();
+        if (tab.getPosition() == 0) {
+            url = UrlConstant.BASEURL + "/article/list/0/json";
+        } else {
+            url = UrlConstant.BASEURL + "/article/listproject/0/json";
+        }
+        mPresenter.getTabListInfo(url, null);
     }
 }

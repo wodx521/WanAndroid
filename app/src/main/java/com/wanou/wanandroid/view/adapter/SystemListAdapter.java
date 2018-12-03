@@ -31,6 +31,7 @@ public class SystemListAdapter extends BaseRecycleViewAdapter {
 
     public void setDatas(List<SystemInfoBean.DatasBean> datas) {
         this.datas = datas;
+        notifyDataSetChanged();
     }
 
     @Override

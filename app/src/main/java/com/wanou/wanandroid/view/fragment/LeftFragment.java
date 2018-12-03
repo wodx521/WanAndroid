@@ -1,5 +1,6 @@
 package com.wanou.wanandroid.view.fragment;
 
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,7 +19,6 @@ import java.util.List;
  * Date on 2018/11/22.
  */
 public class LeftFragment extends BaseMvpFragment<LeftFragmentPresenterImpl> {
-    private List<SystemBean> systemBeanList;
     private FlowLayout mFlLayout1;
     private FlowLayout mFlLayout2;
 
@@ -32,10 +32,6 @@ public class LeftFragment extends BaseMvpFragment<LeftFragmentPresenterImpl> {
         return R.layout.fragment_left;
     }
 
-    public void setSystemBeanList(List<SystemBean> systemBeanList) {
-        this.systemBeanList = systemBeanList;
-    }
-
     @Override
     protected void initView(View view) {
         mFlLayout1 = view.findViewById(R.id.fl_layout1);
@@ -44,7 +40,8 @@ public class LeftFragment extends BaseMvpFragment<LeftFragmentPresenterImpl> {
 
     @Override
     protected void initData() {
-
+        String url = UrlConstant.BASEURL + "/tree/json";
+        mPresenter.getSystemInfo(url);
     }
 
     @Override
@@ -52,7 +49,13 @@ public class LeftFragment extends BaseMvpFragment<LeftFragmentPresenterImpl> {
 
     }
 
-    void notifyData() {
+    public void setSuccessData(List<SystemBean> systemBeanList) {
+        notifyData(systemBeanList);
+    }
+
+    void notifyData(List<SystemBean> systemBeanList) {
+        // 处理数据显示，使用自定义FlowLayout来处理分类的展示和选择，定义点击事件选择不同的分类，
+        // 展示对应的内容
         if (systemBeanList != null && systemBeanList.size() > 0) {
             for (SystemBean systemBean : systemBeanList) {
                 TextView textView1 = new TextView(getActivity());
@@ -68,9 +71,10 @@ public class LeftFragment extends BaseMvpFragment<LeftFragmentPresenterImpl> {
                         v.setSelected(true);
                         v.setClickable(false);
                         ((TextView) v).setTextColor(UiTools.getColor(R.color.white_color));
+                        String checkText = UiTools.getText((TextView) v);
                         for (int i = 0; i < mFlLayout1.getChildCount(); i++) {
                             TextView childAt = (TextView) mFlLayout1.getChildAt(i);
-                            if (childAt.getText().equals(((TextView) v).getText().toString())) {
+                            if (UiTools.getText(childAt).equals(checkText)) {
                                 SystemBean systemBean1 = systemBeanList.get(i);
                                 List<SystemBean.ChildrenBean> children = systemBean1.getChildren();
                                 for (SystemBean.ChildrenBean child : children) {
@@ -86,16 +90,20 @@ public class LeftFragment extends BaseMvpFragment<LeftFragmentPresenterImpl> {
                                             v.setSelected(true);
                                             v.setClickable(false);
                                             ((TextView) v).setTextColor(UiTools.getColor(R.color.white_color));
-
                                             for (int i1 = 0; i1 < mFlLayout2.getChildCount(); i1++) {
                                                 TextView childAt1 = (TextView) mFlLayout2.getChildAt(i1);
-                                                if (childAt1.getText().equals(((TextView) v).getText().toString())) {
-                                                    // TODO: 2018/11/22 这里添加具体列表的代码
-                                                    UiTools.showToast("charat" + childAt.getText().toString() + "~~~~charat1" + childAt1.getText().toString());
-//                                                    http://www.wanandroid.com/article/list/0/json?cid=60
+                                                if (UiTools.getText(childAt1).equals(UiTools.getText((TextView) v))) {
                                                     int id = children.get(i1).getId();
-                                                    String url = UrlConstant.BASEURL + "/article/list/" + 0 + "/json?cid=" + id;
-                                                    mPresenter.getSystemContentList(url);
+                                                    // 将文章id传递到父fragment中，在父fragment中访问网络获取体系列表
+                                                    FourMainFragment fourMainFragment = (FourMainFragment) getParentFragment();
+                                                    if (fourMainFragment != null) {
+                                                        fourMainFragment.getSystemList(id);
+                                                        if (fourMainFragment.getView() != null) {
+                                                            DrawerLayout mDlLayout = fourMainFragment.getView().findViewById(R.id.dl_layout);
+                                                            mDlLayout.closeDrawers();
+                                                        }
+                                                    }
+                                                    // 跳过循环，不设置子View的选中状态
                                                     continue;
                                                 }
                                                 childAt1.setSelected(false);
@@ -106,15 +114,24 @@ public class LeftFragment extends BaseMvpFragment<LeftFragmentPresenterImpl> {
                                     });
                                     mFlLayout2.addView(textView2);
                                 }
+                                // 跳过循环，不设置子View的选中状态
                                 continue;
                             }
                             childAt.setSelected(false);
                             childAt.setClickable(true);
                             childAt.setTextColor(UiTools.getColor(R.color.blue_color));
                         }
+                        // 默认点击二级分类第一个
+                        if (mFlLayout2.getChildCount() > 0) {
+                            mFlLayout2.getChildAt(0).performClick();
+                        }
                     }
                 });
                 mFlLayout1.addView(textView1);
+            }
+            // 默认点击一级分类第一个
+            if (mFlLayout1.getChildCount() > 0) {
+                mFlLayout1.getChildAt(0).performClick();
             }
         }
     }

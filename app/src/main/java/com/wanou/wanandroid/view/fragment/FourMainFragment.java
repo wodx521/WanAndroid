@@ -11,15 +11,18 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.wanou.framelibrary.base.BaseActivity;
 import com.wanou.framelibrary.base.BaseMvpFragment;
 import com.wanou.wanandroid.R;
-import com.wanou.wanandroid.bean.SystemBean;
 import com.wanou.wanandroid.bean.SystemInfoBean;
 import com.wanou.wanandroid.constant.UrlConstant;
 import com.wanou.wanandroid.presenter.FourPresenterImpl;
 import com.wanou.wanandroid.view.adapter.SystemListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +37,9 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
     private DrawerLayout mDlLayout;
     private Toolbar mToolbar;
     private TextView mTvTitle;
+    private SmartRefreshLayout mSrlRefresh;
+    private int page = 0;
+    private List<SystemInfoBean.DatasBean> tempData = new ArrayList<>();
 
     @Override
     protected int getResId() {
@@ -47,6 +53,7 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
         mDlLayout = view.findViewById(R.id.dl_layout);
         mToolbar = view.findViewById(R.id.toolbar);
         mTvTitle = view.findViewById(R.id.tv_title);
+        mSrlRefresh = view.findViewById(R.id.srl_refresh);
 
     }
 
@@ -61,8 +68,6 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
         fragmentTransaction.add(R.id.fl_left, leftFragment, "left_fragment");
         fragmentTransaction.show(leftFragment);
         fragmentTransaction.commit();
-        String url = UrlConstant.BASEURL + "/tree/json";
-        mPresenter.getSystemInfo(url);
 
     }
 
@@ -99,16 +104,38 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
         return new FourPresenterImpl();
     }
 
-    public void setSuccessData(List<SystemBean> systemBeanList) {
-        leftFragment.setSystemBeanList(systemBeanList);
-        leftFragment.notifyData();
+    // 处理结果，
+    public void setSystemData(SystemInfoBean systemInfoBean, int id) {
+        int curPage = systemInfoBean.getCurPage();
+        int pageCount = systemInfoBean.getPageCount();
+        List<SystemInfoBean.DatasBean> datas = systemInfoBean.getDatas();
+        tempData.addAll(datas);
+        systemListAdapter.setDatas(tempData);
+
+        mSrlRefresh.setEnableLoadMore(curPage < pageCount);
+        mSrlRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+                page += 1;
+                String url = UrlConstant.BASEURL + "/article/list/" + page + "/json?cid=" + id;
+                mPresenter.getSystemContentList(url, id);
+            }
+
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                page = 0;
+                tempData.clear();
+                String url = UrlConstant.BASEURL + "/article/list/" + page + "/json?cid=" + id;
+                mPresenter.getSystemContentList(url, id);
+            }
+        });
     }
 
-    public void setSystemData(SystemInfoBean systemInfoBean) {
-        int curPage = systemInfoBean.getCurPage();
-
-        List<SystemInfoBean.DatasBean> datas = systemInfoBean.getDatas();
-        systemListAdapter.setDatas(datas);
-        systemListAdapter.notifyDataSetChanged();
+    // 侧边fragment中获取选择的id，访问网络获取知识体系列表
+    public void getSystemList(int id) {
+        tempData.clear();
+        page = 0;
+        String url = UrlConstant.BASEURL + "/article/list/" + page + "/json?cid=" + id;
+        mPresenter.getSystemContentList(url, id);
     }
 }

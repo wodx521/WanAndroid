@@ -9,29 +9,30 @@ import com.wanou.framelibrary.okgoutil.CustomizeStringCallback;
 import com.wanou.framelibrary.okgoutil.OkGoUtils;
 import com.wanou.framelibrary.utils.GsonUtils;
 import com.wanou.framelibrary.utils.UiTools;
-import com.wanou.wanandroid.bean.SystemInfoBean;
-import com.wanou.wanandroid.view.fragment.FourMainFragment;
+import com.wanou.wanandroid.bean.SystemBean;
 import com.wanou.wanandroid.view.fragment.LeftFragment;
+
+import java.util.List;
 
 /**
  * Author by wodx521
  * Date on 2018/11/23.
  */
 public class LeftFragmentPresenterImpl extends BasePresenterImpl<LeftFragment> {
-    public void getSystemContentList(String url) {
-        OkGoUtils.getRequest(url, "system_info", null, new CustomizeStringCallback() {
+
+    public void getSystemInfo(String url) {
+        OkGoUtils.getRequest(url, "sysytem_list", null, new CustomizeStringCallback() {
             @Override
             public GeneralResult getGeneralResult(String result) {
-                return GsonUtils.fromJson(result, new TypeToken<GeneralResult<SystemInfoBean>>() {
+                return GsonUtils.fromJson(result, new TypeToken<GeneralResult<List<SystemBean>>>() {
                 }.getType());
             }
 
             @Override
             public void onRequestSuccess(SimpleResponse simpleResponse, GeneralResult generalResult) {
                 if (generalResult != null) {
-                    SystemInfoBean systemInfoBean = (SystemInfoBean) generalResult.data;
-                    FourMainFragment fourMainFragment = (FourMainFragment) mPresenterView.getParentFragment();
-                    fourMainFragment.setSystemData(systemInfoBean);
+                    List<SystemBean> systemBeanList = (List<SystemBean>) generalResult.data;
+                    mPresenterView.setSuccessData(systemBeanList);
                 } else {
                     if (UiTools.noEmpty(simpleResponse.msg)) {
                         UiTools.showToast(simpleResponse.msg);
@@ -55,4 +56,5 @@ public class LeftFragmentPresenterImpl extends BasePresenterImpl<LeftFragment> {
             }
         });
     }
+
 }

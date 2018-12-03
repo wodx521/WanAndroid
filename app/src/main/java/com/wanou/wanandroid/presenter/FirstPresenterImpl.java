@@ -89,7 +89,9 @@ public class FirstPresenterImpl extends BasePresenterImpl<FirstMainFragment> {
 
             @Override
             public void onRequestStart(Request<String, ? extends Request> request) {
-                srlRefresh = mPresenterView.getView().findViewById(R.id.srl_refresh);
+                if (mPresenterView.getView() != null) {
+                    srlRefresh = mPresenterView.getView().findViewById(R.id.srl_refresh);
+                }
             }
 
             @Override

@@ -20,9 +20,11 @@ android {
         }
 
         debug {
+//            minifyEnabled false
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
+            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -57,8 +59,8 @@ dependencies {
     //agentweb使用
     implementation 'com.just.agentweb:agentweb:4.0.2'
     //smartrefresh刷新功能
-    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5'
-    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'
 
     //图片加载框架
     implementation 'com.github.bumptech.glide:glide:4.8.0'
