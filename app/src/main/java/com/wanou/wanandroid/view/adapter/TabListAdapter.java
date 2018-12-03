@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.wanou.framelibrary.base.BaseRecycleViewAdapter;
 import com.wanou.wanandroid.R;
-import com.wanou.wanandroid.bean.TabListBean;
+import com.wanou.wanandroid.bean.DatasBean;
 
 import java.io.File;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
  * Date on 2018/11/20.
  */
 public class TabListAdapter extends BaseRecycleViewAdapter {
-    private List<TabListBean.DatasBean> datas;
+    private List<DatasBean> datas;
     private int selectedTabPosition;
 
     public TabListAdapter(Context context) {
@@ -30,17 +30,18 @@ public class TabListAdapter extends BaseRecycleViewAdapter {
         return R.layout.item_tab_info;
     }
 
-    public void setDatas(List<TabListBean.DatasBean> datas, int selectedTabPosition) {
+    public void setDatas(List<DatasBean> datas, int selectedTabPosition) {
         this.datas = datas;
         this.selectedTabPosition = selectedTabPosition;
+        notifyDataSetChanged();
     }
 
     @Override
     protected void bindClickListener(RecyclerView.ViewHolder viewHolder, int position) {
         TabListViewHolder tabListViewHolder = (TabListViewHolder) viewHolder;
-        TabListBean.DatasBean datasBean = datas.get(position);
+        DatasBean datasBean = datas.get(position);
         int chapterId = datasBean.getChapterId();
-        List<TabListBean.DatasBean.TagsBean> tags = datasBean.getTags();
+        List<DatasBean.TagsBean> tags = datasBean.getTags();
 
         tabListViewHolder.mTvContentTitle.setText(datasBean.getTitle());
         tabListViewHolder.mTvAuthor.setText(datasBean.getAuthor());

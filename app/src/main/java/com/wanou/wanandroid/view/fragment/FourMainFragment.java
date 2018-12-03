@@ -8,7 +8,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -17,10 +16,11 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.wanou.framelibrary.base.BaseActivity;
 import com.wanou.framelibrary.base.BaseMvpFragment;
 import com.wanou.wanandroid.R;
+import com.wanou.wanandroid.bean.DatasBean;
 import com.wanou.wanandroid.bean.SystemInfoBean;
 import com.wanou.wanandroid.constant.UrlConstant;
 import com.wanou.wanandroid.presenter.FourPresenterImpl;
-import com.wanou.wanandroid.view.adapter.SystemListAdapter;
+import com.wanou.wanandroid.view.adapter.TabListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,16 +30,14 @@ import java.util.List;
  * Date on 2018/11/10.
  */
 public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
-    private FrameLayout mFlLeft;
     private RecyclerView mRvList;
-    private SystemListAdapter systemListAdapter;
-    private LeftFragment leftFragment;
+    private TabListAdapter systemListAdapter;
     private DrawerLayout mDlLayout;
     private Toolbar mToolbar;
     private TextView mTvTitle;
     private SmartRefreshLayout mSrlRefresh;
     private int page = 0;
-    private List<SystemInfoBean.DatasBean> tempData = new ArrayList<>();
+    private List<DatasBean> tempData = new ArrayList<>();
 
     @Override
     protected int getResId() {
@@ -48,7 +46,6 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
 
     @Override
     protected void initView(View view) {
-        mFlLeft = view.findViewById(R.id.fl_left);
         mRvList = view.findViewById(R.id.rv_list);
         mDlLayout = view.findViewById(R.id.dl_layout);
         mToolbar = view.findViewById(R.id.toolbar);
@@ -61,10 +58,10 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
     protected void initData() {
         initToolBar();
         mToolbar.setVisibility(View.GONE);
-        systemListAdapter = new SystemListAdapter(getActivity());
+        systemListAdapter = new TabListAdapter(getActivity());
         mRvList.setAdapter(systemListAdapter);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        leftFragment = new LeftFragment();
+        LeftFragment leftFragment = new LeftFragment();
         fragmentTransaction.add(R.id.fl_left, leftFragment, "left_fragment");
         fragmentTransaction.show(leftFragment);
         fragmentTransaction.commit();
@@ -108,9 +105,9 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
     public void setSystemData(SystemInfoBean systemInfoBean, int id) {
         int curPage = systemInfoBean.getCurPage();
         int pageCount = systemInfoBean.getPageCount();
-        List<SystemInfoBean.DatasBean> datas = systemInfoBean.getDatas();
+        List<DatasBean> datas = systemInfoBean.getDatas();
         tempData.addAll(datas);
-        systemListAdapter.setDatas(tempData);
+        systemListAdapter.setDatas(tempData,0);
 
         mSrlRefresh.setEnableLoadMore(curPage < pageCount);
         mSrlRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {

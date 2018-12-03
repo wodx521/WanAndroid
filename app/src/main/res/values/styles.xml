@@ -20,7 +20,7 @@
         <item name="tabIndicatorFullWidth">false</item>
         <item name="tabGravity">fill</item>
         <item name="tabMode">fixed</item>
-        <item name="tabTextColor">@color/blue_color</item>
+        <item name="tabTextColor">@color/gray_color1</item>
         <item name="tabSelectedTextColor">@color/blue_color</item>
     </style>
 </resources>

@@ -12,6 +12,7 @@ import com.wanou.framelibrary.base.BaseMvpFragment;
 import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.bean.BannerBean;
+import com.wanou.wanandroid.bean.DatasBean;
 import com.wanou.wanandroid.bean.TabListBean;
 import com.wanou.wanandroid.commontools.BannerLoader;
 import com.wanou.wanandroid.constant.UrlConstant;
@@ -39,7 +40,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
     private SmartRefreshLayout mSrlRefresh;
     private RecyclerView mRvHomeList;
     private String[] homeTab = UiTools.getStringArray(R.array.home_tab);
-    private List<TabListBean.DatasBean> tempDataLists = new ArrayList<>();
+    private List<DatasBean> tempDataLists = new ArrayList<>();
     private TabListAdapter tabListAdapter;
     private int page = 0;
 
@@ -67,7 +68,6 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         mTlbHomeTab.getTabAt(0).select();
 
         tabListAdapter = new TabListAdapter(getActivity());
-
         mRvHomeList.setAdapter(tabListAdapter);
     }
 
@@ -148,7 +148,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
 
     public void setTabSuccess(TabListBean tabListBean) {
         int selectedTabPosition = mTlbHomeTab.getSelectedTabPosition();
-        List<TabListBean.DatasBean> datas = tabListBean.getDatas();
+        List<DatasBean> datas = tabListBean.getDatas();
         tempDataLists.addAll(datas);
         tabListAdapter.setDatas(tempDataLists, selectedTabPosition);
         tabListAdapter.notifyDataSetChanged();
