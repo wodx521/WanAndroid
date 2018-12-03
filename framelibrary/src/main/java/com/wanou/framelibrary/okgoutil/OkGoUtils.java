@@ -63,26 +63,30 @@ public class OkGoUtils {
     }
 
     public static void postRequest(String url, Object tag, Object objParams, StringCallback stringCallback) {
-        if (objParams instanceof String) {
+        if (objParams != null) {
+            if (objParams instanceof String) {
+                OkGo.<String>post(url)
+                        .tag(tag)
+                        .upJson((String) objParams)
+                        .execute(stringCallback);
+            }
+            if (objParams instanceof HttpParams) {
+                OkGo.<String>post(url)
+                        .tag(tag)
+                        .params((HttpParams) objParams)
+                        .execute(stringCallback);
+            }
+            if (objParams instanceof Map) {
+                OkGo.<String>post(url)
+                        .tag(tag)
+                        .isSpliceUrl(true)
+                        .params((Map<String, String>) objParams)
+                        .execute(stringCallback);
+            }
+        } else {
             OkGo.<String>post(url)
                     .tag(tag)
-                    .upJson((String) objParams)
-                    .execute(stringCallback);
-        }
-        if (objParams instanceof HttpParams) {
-            OkGo.<String>post(url)
-                    .tag(tag)
-                    .params((HttpParams) objParams)
-                    .execute(stringCallback);
-        }
-
-        if (objParams instanceof Map) {
-            OkGo.<String>post(url)
-                    .tag(tag)
-                    .isSpliceUrl(true)
-                    .params((Map<String, String>) objParams)
                     .execute(stringCallback);
         }
     }
-
 }

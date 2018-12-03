@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.wanou.framelibrary.base.BaseRecycleViewAdapter;
@@ -40,14 +41,16 @@ public class TabListAdapter extends BaseRecycleViewAdapter {
     protected void bindClickListener(RecyclerView.ViewHolder viewHolder, int position) {
         TabListViewHolder tabListViewHolder = (TabListViewHolder) viewHolder;
         DatasBean datasBean = datas.get(position);
-        int chapterId = datasBean.getChapterId();
+        int id = datasBean.getId();
         List<DatasBean.TagsBean> tags = datasBean.getTags();
 
         tabListViewHolder.mTvContentTitle.setText(datasBean.getTitle());
         tabListViewHolder.mTvAuthor.setText(datasBean.getAuthor());
-        tabListViewHolder.mTvClassification.setText(datasBean.getSuperChapterName()
-                + File.separator + datasBean.getChapterName());
+        tabListViewHolder.mTvClassification.setText(datasBean.getSuperChapterName() + File.separator +
+                datasBean.getChapterName());
         tabListViewHolder.mTvPublishTime.setText(datasBean.getNiceDate());
+        tabListViewHolder.mCbIsCollect.setVisibility(View.VISIBLE);
+        tabListViewHolder.mCbIsCollect.setChecked(datasBean.isCollect());
 
         if (selectedTabPosition == 0) {
             if (tags.size() > 0) {
@@ -60,6 +63,18 @@ public class TabListAdapter extends BaseRecycleViewAdapter {
         } else {
             tabListViewHolder.mTvType.setVisibility(View.GONE);
         }
+
+//        http://www.wanandroid.com/lg/collect/7568/json
+
+        tabListViewHolder.mCbIsCollect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (collectArticleListener != null) {
+                    collectArticleListener.onCollectArticleListener(position,id);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -78,16 +93,26 @@ public class TabListAdapter extends BaseRecycleViewAdapter {
     static class TabListViewHolder extends RecyclerView.ViewHolder {
         private TextView mTvContentTitle, mTvType, mTvAuthor, mTvClassification,
                 mTvPublishTime;
+        private CheckBox mCbIsCollect;
 
-        public TabListViewHolder(@NonNull View itemView) {
+        TabListViewHolder(@NonNull View itemView) {
             super(itemView);
             mTvContentTitle = itemView.findViewById(R.id.tv_content_title);
             mTvType = itemView.findViewById(R.id.tv_type);
             mTvAuthor = itemView.findViewById(R.id.tv_author);
             mTvClassification = itemView.findViewById(R.id.tv_classification);
             mTvPublishTime = itemView.findViewById(R.id.tv_publish_time);
+            mCbIsCollect = itemView.findViewById(R.id.cb_is_collect);
         }
     }
 
+    public interface CollectArticleListener {
+        void onCollectArticleListener(int position,int id);
+    }
 
+    private CollectArticleListener collectArticleListener;
+
+    public void setCollectArticleListener(CollectArticleListener collectArticleListener) {
+        this.collectArticleListener = collectArticleListener;
+    }
 }

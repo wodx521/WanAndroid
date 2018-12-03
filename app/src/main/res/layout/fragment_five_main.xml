@@ -4,9 +4,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_mine_bg" />
+    </RelativeLayout>
+
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_collect_article"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        android:text="第五页" />
+        android:padding="10dp"
+        android:text="@string/collect_article"
+        android:textColor="@color/blue_color" />
+
+    <TextView
+        android:id="@+id/tv_collect_web"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/collect_web"
+        android:textColor="@color/blue_color" />
+
+    <Button
+        android:id="@+id/bt_exit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_bg_blue"
+        android:text="@string/exit"
+        android:textColor="@color/white_color" />
+
 </LinearLayout>

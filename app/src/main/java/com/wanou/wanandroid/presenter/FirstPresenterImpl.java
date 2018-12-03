@@ -1,7 +1,6 @@
 package com.wanou.wanandroid.presenter;
 
 import com.google.gson.reflect.TypeToken;
-import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.request.base.Request;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.wanou.framelibrary.base.BasePresenterImpl;
@@ -25,8 +24,8 @@ import java.util.List;
 public class FirstPresenterImpl extends BasePresenterImpl<FirstMainFragment> {
     private SmartRefreshLayout srlRefresh;
 
-    public void getBannerInfo(String url, HttpParams httpParams) {
-        OkGoUtils.getRequest(url, "banner", httpParams, new CustomizeStringCallback() {
+    public void getBannerInfo(String url) {
+        OkGoUtils.getRequest(url, "banner", null, new CustomizeStringCallback() {
             @Override
             public GeneralResult getGeneralResult(String result) {
                 return GsonUtils.fromJson(result, new TypeToken<GeneralResult<List<BannerBean>>>() {
@@ -62,8 +61,8 @@ public class FirstPresenterImpl extends BasePresenterImpl<FirstMainFragment> {
         });
     }
 
-    public void getTabListInfo(String url, HttpParams httpParams) {
-        OkGoUtils.getRequest(url, "tab_list", httpParams, new CustomizeStringCallback() {
+    public void getTabListInfo(String url) {
+        OkGoUtils.getRequest(url, "tab_list", null, new CustomizeStringCallback() {
             @Override
             public GeneralResult getGeneralResult(String result) {
                 return GsonUtils.fromJson(result, new TypeToken<GeneralResult<TabListBean>>() {
@@ -100,6 +99,42 @@ public class FirstPresenterImpl extends BasePresenterImpl<FirstMainFragment> {
                     srlRefresh.finishRefresh();
                     srlRefresh.finishLoadMore();
                 }
+            }
+        });
+    }
+
+    public void setCollect(String url) {
+        OkGoUtils.postRequest(url, "cancel_collect", null, new CustomizeStringCallback() {
+            @Override
+            public GeneralResult getGeneralResult(String result) {
+                return GsonUtils.fromJson(result, new TypeToken<GeneralResult>() {
+                }.getType());
+            }
+
+            @Override
+            public void onRequestSuccess(SimpleResponse simpleResponse, GeneralResult generalResult) {
+                if (generalResult != null) {
+                    mPresenterView.setCollectListener();
+                } else {
+                    if (UiTools.noEmpty(simpleResponse.msg)) {
+                        UiTools.showToast(simpleResponse.msg);
+                    }
+                }
+            }
+
+            @Override
+            public void onRequestError(Throwable exception) {
+
+            }
+
+            @Override
+            public void onRequestStart(Request<String, ? extends Request> request) {
+
+            }
+
+            @Override
+            public void onRequestFinish() {
+
             }
         });
     }

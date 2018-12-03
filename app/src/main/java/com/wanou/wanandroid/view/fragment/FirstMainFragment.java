@@ -60,7 +60,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
     @Override
     protected void initData() {
         initBanner();
-        mPresenter.getBannerInfo(UrlConstant.BASEURL + "/banner/json", null);
+        mPresenter.getBannerInfo(UrlConstant.BASEURL + "/banner/json");
         for (String tabContent : homeTab) {
             mTlbHomeTab.addTab(mTlbHomeTab.newTab().setText(tabContent));
         }
@@ -151,7 +151,6 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         List<DatasBean> datas = tabListBean.getDatas();
         tempDataLists.addAll(datas);
         tabListAdapter.setDatas(tempDataLists, selectedTabPosition);
-        tabListAdapter.notifyDataSetChanged();
         if (tabListBean.getCurPage() == tabListBean.getPageCount()) {
             mSrlRefresh.setEnableLoadMore(false);
         } else {
@@ -171,16 +170,44 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
                         url = UrlConstant.BASEURL + "/article/listproject/" + page + "/json";
                         break;
                 }
-                mPresenter.getTabListInfo(url, null);
+                mPresenter.getTabListInfo(url);
             }
 
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 page = 0;
                 tempDataLists.clear();
-                mTlbHomeTab.getTabAt(mTlbHomeTab.getSelectedTabPosition()).select();
+                String url;
+                switch (mTlbHomeTab.getSelectedTabPosition()) {
+                    case 0:
+                        url = UrlConstant.BASEURL + "/article/list/" + page + "/json";
+                        break;
+                    case 1:
+                    default:
+                        url = UrlConstant.BASEURL + "/article/listproject/" + page + "/json";
+                        break;
+                }
+                mPresenter.getTabListInfo(url);
             }
         });
+
+        tabListAdapter.setCollectArticleListener(new TabListAdapter.CollectArticleListener() {
+            @Override
+            public void onCollectArticleListener(int position, int id) {
+                if (tempDataLists.size()>0) {
+                    DatasBean datasBean = tempDataLists.get(position);
+                    String url;
+                    if (datasBean.isCollect()) {
+                        url = UrlConstant.BASEURL + "/lg/uncollect_originId/" + id + "/json";
+                        mPresenter.setCollect(url);
+                    } else {
+                        url = UrlConstant.BASEURL + "/lg/collect/" + id + "/json";
+                        mPresenter.setCollect(url);
+                    }
+                }
+            }
+        });
+
     }
 
     private void tabSelect(TabLayout.Tab tab) {
@@ -191,6 +218,10 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         } else {
             url = UrlConstant.BASEURL + "/article/listproject/0/json";
         }
-        mPresenter.getTabListInfo(url, null);
+        mPresenter.getTabListInfo(url);
+    }
+
+    public void setCollectListener() {
+
     }
 }
