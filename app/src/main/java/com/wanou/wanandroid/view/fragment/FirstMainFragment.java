@@ -199,10 +199,10 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
                     String url;
                     if (datasBean.isCollect()) {
                         url = UrlConstant.BASEURL + "/lg/uncollect_originId/" + id + "/json";
-                        mPresenter.setCollect(url);
+                        mPresenter.setCollect(url,position);
                     } else {
                         url = UrlConstant.BASEURL + "/lg/collect/" + id + "/json";
-                        mPresenter.setCollect(url);
+                        mPresenter.setCollect(url,position);
                     }
                 }
             }
@@ -221,7 +221,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         mPresenter.getTabListInfo(url);
     }
 
-    public void setCollectListener() {
+    public void setCollectListener(int position) {
 
     }
 }

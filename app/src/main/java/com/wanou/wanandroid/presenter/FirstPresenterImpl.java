@@ -103,7 +103,7 @@ public class FirstPresenterImpl extends BasePresenterImpl<FirstMainFragment> {
         });
     }
 
-    public void setCollect(String url) {
+    public void setCollect(String url, int position) {
         OkGoUtils.postRequest(url, "cancel_collect", null, new CustomizeStringCallback() {
             @Override
             public GeneralResult getGeneralResult(String result) {
@@ -114,7 +114,7 @@ public class FirstPresenterImpl extends BasePresenterImpl<FirstMainFragment> {
             @Override
             public void onRequestSuccess(SimpleResponse simpleResponse, GeneralResult generalResult) {
                 if (generalResult != null) {
-                    mPresenterView.setCollectListener();
+                    mPresenterView.setCollectListener(position);
                 } else {
                     if (UiTools.noEmpty(simpleResponse.msg)) {
                         UiTools.showToast(simpleResponse.msg);
