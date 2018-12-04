@@ -1,5 +1,7 @@
 package com.wanou.wanandroid.view.fragment;
 
+import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,12 +17,14 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.wanou.framelibrary.base.BaseActivity;
 import com.wanou.framelibrary.base.BaseMvpFragment;
+import com.wanou.framelibrary.base.BaseRecycleViewAdapter;
 import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.bean.DatasBean;
 import com.wanou.wanandroid.bean.SystemInfoBean;
 import com.wanou.wanandroid.constant.UrlConstant;
 import com.wanou.wanandroid.presenter.FourPresenterImpl;
+import com.wanou.wanandroid.view.activity.BannerDetailActivity;
 import com.wanou.wanandroid.view.adapter.TabListAdapter;
 
 import java.util.ArrayList;
@@ -35,10 +39,10 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
     private TabListAdapter tabListAdapter;
     private DrawerLayout mDlLayout;
     private Toolbar mToolbar;
-    private TextView mTvTitle;
     private SmartRefreshLayout mSrlRefresh;
     private int page = 0;
-    private List<DatasBean> tempData = new ArrayList<>();
+    private List<DatasBean> tempDataLists = new ArrayList<>();
+    private Bundle bundle = new Bundle();
 
     @Override
     protected int getResId() {
@@ -50,7 +54,7 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
         mRvList = view.findViewById(R.id.rv_list);
         mDlLayout = view.findViewById(R.id.dl_layout);
         mToolbar = view.findViewById(R.id.toolbar);
-        mTvTitle = view.findViewById(R.id.tv_title);
+        TextView mTvTitle = view.findViewById(R.id.tv_title);
         mSrlRefresh = view.findViewById(R.id.srl_refresh);
 
     }
@@ -104,7 +108,7 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
 
     // 侧边fragment中获取选择的id，访问网络获取知识体系列表
     public void getSystemList(int id) {
-        tempData.clear();
+        tempDataLists.clear();
         page = 0;
         String url = UrlConstant.BASEURL + "/article/list/" + page + "/json?cid=" + id;
         mPresenter.getSystemContentList(url, id);
@@ -115,8 +119,8 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
         int curPage = systemInfoBean.getCurPage();
         int pageCount = systemInfoBean.getPageCount();
         List<DatasBean> datas = systemInfoBean.getDatas();
-        tempData.addAll(datas);
-        tabListAdapter.setDatas(tempData, 0, false);
+        tempDataLists.addAll(datas);
+        tabListAdapter.setDatas(tempDataLists, 0, false);
 
         mSrlRefresh.setEnableLoadMore(curPage < pageCount);
         mSrlRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
@@ -130,7 +134,7 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 page = 0;
-                tempData.clear();
+                tempDataLists.clear();
                 String url = UrlConstant.BASEURL + "/article/list/" + page + "/json?cid=" + id;
                 mPresenter.getSystemContentList(url, id);
             }
@@ -138,8 +142,8 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
         tabListAdapter.setCollectArticleListener(new TabListAdapter.CollectArticleListener() {
             @Override
             public void onCollectArticleListener(int position, int id) {
-                if (tempData.size() > 0) {
-                    DatasBean datasBean = tempData.get(position);
+                if (tempDataLists.size() > 0) {
+                    DatasBean datasBean = tempDataLists.get(position);
                     String url;
                     if (datasBean.isCollect()) {
                         url = UrlConstant.BASEURL + "/lg/uncollect_originId/" + id + "/json";
@@ -151,16 +155,32 @@ public class FourMainFragment extends BaseMvpFragment<FourPresenterImpl> {
                 }
             }
         });
+
+        tabListAdapter.setOnItemClickListener(new BaseRecycleViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+                if (tempDataLists.size() > 0) {
+                    bundle.clear();
+                    DatasBean datasBean = tempDataLists.get(position);
+                    String link = datasBean.getLink();
+                    bundle.putString("bannerUrl", link);
+//                    BannerDetailActivity.startActivity(getActivity(), bundle, BannerDetailActivity.class);
+                    ActivityOptionsCompat activityOptionsCompat =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, getString(R.string.WebView));
+                    BannerDetailActivity.compatStartActivity(getActivity(), bundle, activityOptionsCompat.toBundle(), BannerDetailActivity.class);
+                }
+            }
+        });
     }
 
     public void setCollectListener(int position, boolean isCollect) {
         if (isCollect) {
-            tempData.get(position).setCollect(false);
+            tempDataLists.get(position).setCollect(false);
             UiTools.showToast("取消收藏");
         } else {
-            tempData.get(position).setCollect(true);
+            tempDataLists.get(position).setCollect(true);
             UiTools.showToast("收藏成功");
         }
-        tabListAdapter.setDatas(tempData, 0, false);
+        tabListAdapter.setDatas(tempDataLists, 0, false);
     }
 }

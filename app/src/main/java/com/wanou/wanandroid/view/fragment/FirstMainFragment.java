@@ -2,6 +2,7 @@ package com.wanou.wanandroid.view.fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -9,6 +10,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.wanou.framelibrary.base.BaseMvpFragment;
+import com.wanou.framelibrary.base.BaseRecycleViewAdapter;
 import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.bean.BannerBean;
@@ -150,7 +152,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         int selectedTabPosition = mTlbHomeTab.getSelectedTabPosition();
         List<DatasBean> datas = tabListBean.getDatas();
         tempDataLists.addAll(datas);
-        tabListAdapter.setDatas(tempDataLists, selectedTabPosition,true);
+        tabListAdapter.setDatas(tempDataLists, selectedTabPosition, true);
         if (tabListBean.getCurPage() == tabListBean.getPageCount()) {
             mSrlRefresh.setEnableLoadMore(false);
         } else {
@@ -208,6 +210,22 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
             }
         });
 
+        tabListAdapter.setOnItemClickListener(new BaseRecycleViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+                if (tempDataLists.size() > 0) {
+                    bundle.clear();
+                    DatasBean datasBean = tempDataLists.get(position);
+                    String link = datasBean.getLink();
+                    bundle.putString("bannerUrl", link);
+//                    BannerDetailActivity.startActivity(getActivity(), bundle, BannerDetailActivity.class);
+
+                    ActivityOptionsCompat activityOptionsCompat =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, getString(R.string.WebView));
+                    BannerDetailActivity.compatStartActivity(getActivity(), bundle, activityOptionsCompat.toBundle(), BannerDetailActivity.class);
+                }
+            }
+        });
     }
 
     private void tabSelect(TabLayout.Tab tab) {
@@ -229,6 +247,6 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
             tempDataLists.get(position).setCollect(true);
             UiTools.showToast("收藏成功");
         }
-        tabListAdapter.setDatas(tempDataLists, mTlbHomeTab.getSelectedTabPosition(),true);
+        tabListAdapter.setDatas(tempDataLists, mTlbHomeTab.getSelectedTabPosition(), true);
     }
 }

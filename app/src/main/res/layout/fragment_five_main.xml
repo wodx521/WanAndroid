@@ -23,11 +23,11 @@
         android:textColor="@color/blue_color" />
 
     <TextView
-        android:id="@+id/tv_collect_web"
+        android:id="@+id/tv_about_us"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="@string/collect_web"
+        android:text="@string/about_us"
         android:textColor="@color/blue_color" />
 
     <Button

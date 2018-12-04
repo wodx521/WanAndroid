@@ -1,6 +1,8 @@
 package com.wanou.wanandroid.view.fragment;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -8,6 +10,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.wanou.framelibrary.base.BaseMvpFragment;
+import com.wanou.framelibrary.base.BaseRecycleViewAdapter;
 import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.bean.ArticleListBean;
@@ -15,6 +18,7 @@ import com.wanou.wanandroid.bean.ChapterListBean;
 import com.wanou.wanandroid.bean.DatasBean;
 import com.wanou.wanandroid.constant.UrlConstant;
 import com.wanou.wanandroid.presenter.ThirdPresenterImpl;
+import com.wanou.wanandroid.view.activity.BannerDetailActivity;
 import com.wanou.wanandroid.view.adapter.TabListAdapter;
 
 import java.util.ArrayList;
@@ -31,9 +35,11 @@ public class ThirdMainFragment extends BaseMvpFragment<ThirdPresenterImpl> imple
     private List<ChapterListBean> tempChapterList = new ArrayList<>();
     private TabListAdapter tabListAdapter;
     private int page = 0;
-    private List<DatasBean> tempDatas = new ArrayList<>();
+    private List<DatasBean> tempDataLists = new ArrayList<>();
+    private Bundle bundle = new Bundle();
 
     @Override
+
     protected int getResId() {
         return R.layout.fragment_third_main;
     }
@@ -99,7 +105,7 @@ public class ThirdMainFragment extends BaseMvpFragment<ThirdPresenterImpl> imple
         mRvThirdList.scrollToPosition(0);
         int position = tab.getPosition();
         page = 0;
-        tempDatas.clear();
+        tempDataLists.clear();
         ChapterListBean chapterListBean = tempChapterList.get(position);
         int id = chapterListBean.getId();
         String url = UrlConstant.BASEURL + "/wxarticle/list/" + id + "/" + page + "/json";
@@ -110,8 +116,8 @@ public class ThirdMainFragment extends BaseMvpFragment<ThirdPresenterImpl> imple
         int curPage = articleListBean.getCurPage();
         int pageCount = articleListBean.getPageCount();
         List<DatasBean> datas = articleListBean.getDatas();
-        tempDatas.addAll(datas);
-        tabListAdapter.setDatas(tempDatas, 0,false);
+        tempDataLists.addAll(datas);
+        tabListAdapter.setDatas(tempDataLists, 0, false);
         mSrlRefresh.setEnableLoadMore(curPage < pageCount);
 
         mSrlRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
@@ -125,7 +131,7 @@ public class ThirdMainFragment extends BaseMvpFragment<ThirdPresenterImpl> imple
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 page = 0;
-                tempDatas.clear();
+                tempDataLists.clear();
                 String url = UrlConstant.BASEURL + "/wxarticle/list/" + id + "/" + page + "/json";
                 mPresenter.getArticleList(url, id);
             }
@@ -134,8 +140,8 @@ public class ThirdMainFragment extends BaseMvpFragment<ThirdPresenterImpl> imple
         tabListAdapter.setCollectArticleListener(new TabListAdapter.CollectArticleListener() {
             @Override
             public void onCollectArticleListener(int position, int id) {
-                if (tempDatas.size() > 0) {
-                    DatasBean datasBean = tempDatas.get(position);
+                if (tempDataLists.size() > 0) {
+                    DatasBean datasBean = tempDataLists.get(position);
                     String url;
                     if (datasBean.isCollect()) {
                         url = UrlConstant.BASEURL + "/lg/uncollect_originId/" + id + "/json";
@@ -147,16 +153,32 @@ public class ThirdMainFragment extends BaseMvpFragment<ThirdPresenterImpl> imple
                 }
             }
         });
+
+        tabListAdapter.setOnItemClickListener(new BaseRecycleViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+                if (tempDataLists.size() > 0) {
+                    bundle.clear();
+                    DatasBean datasBean = tempDataLists.get(position);
+                    String link = datasBean.getLink();
+                    bundle.putString("bannerUrl", link);
+//                    BannerDetailActivity.startActivity(getActivity(), bundle, BannerDetailActivity.class);
+                    ActivityOptionsCompat activityOptionsCompat =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, getString(R.string.WebView));
+                    BannerDetailActivity.compatStartActivity(getActivity(), bundle, activityOptionsCompat.toBundle(), BannerDetailActivity.class);
+                }
+            }
+        });
     }
 
     public void setCollectListener(int position, boolean isCollect) {
         if (isCollect) {
-            tempDatas.get(position).setCollect(false);
+            tempDataLists.get(position).setCollect(false);
             UiTools.showToast("取消收藏");
         } else {
-            tempDatas.get(position).setCollect(true);
+            tempDataLists.get(position).setCollect(true);
             UiTools.showToast("收藏成功");
         }
-        tabListAdapter.setDatas(tempDatas, mTlThird.getSelectedTabPosition(),false);
+        tabListAdapter.setDatas(tempDataLists, mTlThird.getSelectedTabPosition(), false);
     }
 }

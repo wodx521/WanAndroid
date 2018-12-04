@@ -11,6 +11,7 @@ import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.constant.UrlConstant;
 import com.wanou.wanandroid.presenter.FivePresenterImpl;
+import com.wanou.wanandroid.view.activity.BannerDetailActivity;
 import com.wanou.wanandroid.view.activity.CollectArticleActivity;
 import com.wanou.wanandroid.view.activity.LoginActivity;
 
@@ -29,7 +30,7 @@ public class FiveMainFragment extends BaseMvpFragment<FivePresenterImpl> impleme
     @Override
     protected void initView(View view) {
         TextView mTvCollectArticle = view.findViewById(R.id.tv_collect_article);
-        TextView mTvCollectWeb = view.findViewById(R.id.tv_collect_web);
+        TextView mTvCollectWeb = view.findViewById(R.id.tv_about_us);
         Button mBtExit = view.findViewById(R.id.bt_exit);
 
         mTvCollectArticle.setOnClickListener(this);
@@ -53,16 +54,21 @@ public class FiveMainFragment extends BaseMvpFragment<FivePresenterImpl> impleme
 
     @Override
     public void onClick(View v) {
+        String url;
         switch (v.getId()) {
             case R.id.tv_collect_article:
                 bundle.clear();
-                CollectArticleActivity.startActivity(getActivity(), bundle);
-                break;
-            case R.id.tv_collect_web:
+                CollectArticleActivity.startActivity(getActivity(), bundle, CollectArticleActivity.class);
 
                 break;
+            case R.id.tv_about_us:
+                bundle.clear();
+                url = "http://www.wanandroid.com/about";
+                bundle.putString("bannerUrl", url);
+                BannerDetailActivity.startActivity(getActivity(), bundle, BannerDetailActivity.class);
+                break;
             case R.id.bt_exit:
-                String url = UrlConstant.BASEURL + "/user/logout/json";
+                url = UrlConstant.BASEURL + "/user/logout/json";
                 mPresenter.exitLogout(url);
                 break;
             default:

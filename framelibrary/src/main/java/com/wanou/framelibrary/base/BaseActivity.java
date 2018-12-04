@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.wanou.framelibrary.manager.ActivityManage;
@@ -23,6 +24,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
         context.startActivity(intent);
     }
 
+    public static void compatStartActivity(Context context, Bundle intentBundle, Bundle bundle, Class<?> cls) {
+        Intent intent = new Intent(context, cls);
+        if (intentBundle != null) {
+            intent.putExtra("bundle", intentBundle);
+        }
+        ActivityCompat.startActivity(context, intent, bundle);
+    }
+
     public static void startActivityForResult(Context context, Bundle bundle, int requestCode, Class<?> cls) {
         Intent intent = new Intent(context, cls);
         if (bundle != null) {
@@ -30,6 +39,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
         }
         if (context instanceof BaseActivity) {
             ((BaseActivity) context).startActivityForResult(intent, requestCode);
+        }
+    }
+
+    public static void compatStartActivityForResult(Context context, Bundle intentBundle, Bundle bundle, int requestCode, Class<?> cls) {
+        Intent intent = new Intent(context, cls);
+        if (intentBundle != null) {
+            intent.putExtra("bundle", intentBundle);
+        }
+        if (context instanceof BaseActivity) {
+            ActivityCompat.startActivityForResult((BaseActivity) context, intent, requestCode, bundle);
         }
     }
 
@@ -41,6 +60,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
         setContentView(getResId());
         initView();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+//        ActivityCompat.finishAffinity(this);
+        ActivityCompat.finishAfterTransition(this);
+    }
+
 
     //设置布局id
     protected abstract int getResId();

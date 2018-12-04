@@ -1,15 +1,16 @@
 package com.wanou.wanandroid.view.activity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.lzy.okgo.model.HttpParams;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.wanou.framelibrary.base.BaseMvpActivity;
+import com.wanou.framelibrary.base.BaseRecycleViewAdapter;
 import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.bean.CollectArticleBean;
@@ -29,17 +30,10 @@ public class CollectArticleActivity extends BaseMvpActivity<CollectArticlePresen
     private RecyclerView mRvCollectArticle;
     private SmartRefreshLayout mSrlRefresh;
     private CollectArticleAdapter collectArticleAdapter;
-    private List<CollectArticleBean.DatasBean> tempDatas = new ArrayList<>();
+    private List<CollectArticleBean.DatasBean> tempDataLists = new ArrayList<>();
     private int page = 0;
     private HttpParams httpParams = new HttpParams();
-
-    public static void startActivity(Context context, Bundle bundle) {
-        Intent intent = new Intent(context, CollectArticleActivity.class);
-        if (bundle != null && bundle.size() > 0) {
-            intent.putExtra("bundle", bundle);
-        }
-        context.startActivity(intent);
-    }
+    private Bundle bundle = new Bundle();
 
     @Override
     protected int getResId() {
@@ -71,8 +65,8 @@ public class CollectArticleActivity extends BaseMvpActivity<CollectArticlePresen
         int pageCount = collectArticleBean.getPageCount();
         mSrlRefresh.setEnableLoadMore(curPage < pageCount);
         List<CollectArticleBean.DatasBean> datas = collectArticleBean.getDatas();
-        tempDatas.addAll(datas);
-        collectArticleAdapter.setCollectData(tempDatas);
+        tempDataLists.addAll(datas);
+        collectArticleAdapter.setCollectData(tempDataLists);
 
         mSrlRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
@@ -85,7 +79,7 @@ public class CollectArticleActivity extends BaseMvpActivity<CollectArticlePresen
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 page = 0;
-                tempDatas.clear();
+                tempDataLists.clear();
                 String url = UrlConstant.BASEURL + "/lg/collect/list/" + page + "/json";
                 mPresenter.getCollectArticle(url);
             }
@@ -99,17 +93,34 @@ public class CollectArticleActivity extends BaseMvpActivity<CollectArticlePresen
                 mPresenter.setCancelCollect(url, httpParams, id);
             }
         });
+
+        collectArticleAdapter.setOnItemClickListener(new BaseRecycleViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+                if (tempDataLists.size() > 0) {
+                    bundle.clear();
+                    CollectArticleBean.DatasBean datasBean = tempDataLists.get(position);
+                    String link = datasBean.getLink();
+                    bundle.putString("bannerUrl", link);
+//                    BannerDetailActivity.startActivity(CollectArticleActivity.this, bundle, BannerDetailActivity.class);
+
+                    ActivityOptionsCompat activityOptionsCompat =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(CollectArticleActivity.this, view, getString(R.string.WebView));
+                    BannerDetailActivity.compatStartActivity(CollectArticleActivity.this, bundle, activityOptionsCompat.toBundle(), BannerDetailActivity.class);
+                }
+            }
+        });
     }
 
     public void setCancelSuccess(int id) {
         UiTools.showToast("取消收藏");
-        Iterator<CollectArticleBean.DatasBean> iterator = tempDatas.iterator();
+        Iterator<CollectArticleBean.DatasBean> iterator = tempDataLists.iterator();
         while (iterator.hasNext()) {
             CollectArticleBean.DatasBean next = iterator.next();
             if (next.getId() == id) {
                 iterator.remove();
             }
         }
-        collectArticleAdapter.setCollectData(tempDatas);
+        collectArticleAdapter.setCollectData(tempDataLists);
     }
 }

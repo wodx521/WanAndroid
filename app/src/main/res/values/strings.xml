@@ -15,8 +15,9 @@
     <string name="open">开</string>
     <string name="close">关</string>
     <string name="collect_article">收藏文章</string>
-    <string name="collect_web">收藏网站</string>
     <string name="exit">退出登录</string>
     <string name="cancel_collect">取消收藏</string>
+    <string name="about_us">关于我们</string>
+    <string name="WebView">webView</string>
 
 </resources>
