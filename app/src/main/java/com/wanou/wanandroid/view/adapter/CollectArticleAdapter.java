@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.wanou.framelibrary.base.BaseRecycleViewAdapter;
@@ -49,7 +48,7 @@ public class CollectArticleAdapter extends BaseRecycleViewAdapter {
         collectArticleViewHolder.mTvPublishTime.setText(datasBean.getNiceDate());
         collectArticleViewHolder.mTvClassification.setText(datasBean.getChapterName());
         collectArticleViewHolder.mTvType.setText(R.string.cancel_collect);
-        collectArticleViewHolder.mCbIsCollect.setVisibility(View.GONE);
+        collectArticleViewHolder.mTvIsCollect.setVisibility(View.GONE);
         collectArticleViewHolder.mTvType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +73,7 @@ public class CollectArticleAdapter extends BaseRecycleViewAdapter {
         private TextView mTvContentTitle;
         private TextView mTvClassification;
         private TextView mTvType;
-        private CheckBox mCbIsCollect;
+        private TextView mTvIsCollect;
 
         CollectArticleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,7 +82,7 @@ public class CollectArticleAdapter extends BaseRecycleViewAdapter {
             mTvContentTitle = itemView.findViewById(R.id.tv_content_title);
             mTvClassification = itemView.findViewById(R.id.tv_classification);
             mTvType = itemView.findViewById(R.id.tv_type);
-            mCbIsCollect = itemView.findViewById(R.id.cb_is_collect);
+            mTvIsCollect = itemView.findViewById(R.id.tv_is_collect);
         }
     }
 

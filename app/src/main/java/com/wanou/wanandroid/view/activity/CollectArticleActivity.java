@@ -102,7 +102,7 @@ public class CollectArticleActivity extends BaseMvpActivity<CollectArticlePresen
     }
 
     public void setCancelSuccess(int id) {
-        UiTools.showToast("取消收藏成功");
+        UiTools.showToast("取消收藏");
         Iterator<CollectArticleBean.DatasBean> iterator = tempDatas.iterator();
         while (iterator.hasNext()) {
             CollectArticleBean.DatasBean next = iterator.next();

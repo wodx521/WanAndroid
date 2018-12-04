@@ -104,4 +104,40 @@ public class SecondPresenterImpl extends BasePresenterImpl<SecondMainFragment> {
         });
     }
 
+    public void setCollect(String url, int position, boolean isCollect) {
+        OkGoUtils.postRequest(url, "cancel_collect", null, new CustomizeStringCallback() {
+            @Override
+            public GeneralResult getGeneralResult(String result) {
+                return GsonUtils.fromJson(result, new TypeToken<GeneralResult>() {
+                }.getType());
+            }
+
+            @Override
+            public void onRequestSuccess(SimpleResponse simpleResponse, GeneralResult generalResult) {
+                if (generalResult != null) {
+                    mPresenterView.setCollectListener(position,isCollect);
+                } else {
+                    if (UiTools.noEmpty(simpleResponse.msg)) {
+                        UiTools.showToast(simpleResponse.msg);
+                    }
+                }
+            }
+
+            @Override
+            public void onRequestError(Throwable exception) {
+
+            }
+
+            @Override
+            public void onRequestStart(Request<String, ? extends Request> request) {
+
+            }
+
+            @Override
+            public void onRequestFinish() {
+
+            }
+        });
+    }
+
 }

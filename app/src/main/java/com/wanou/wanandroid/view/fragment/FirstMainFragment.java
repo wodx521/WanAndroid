@@ -150,7 +150,7 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         int selectedTabPosition = mTlbHomeTab.getSelectedTabPosition();
         List<DatasBean> datas = tabListBean.getDatas();
         tempDataLists.addAll(datas);
-        tabListAdapter.setDatas(tempDataLists, selectedTabPosition);
+        tabListAdapter.setDatas(tempDataLists, selectedTabPosition,true);
         if (tabListBean.getCurPage() == tabListBean.getPageCount()) {
             mSrlRefresh.setEnableLoadMore(false);
         } else {
@@ -194,15 +194,15 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         tabListAdapter.setCollectArticleListener(new TabListAdapter.CollectArticleListener() {
             @Override
             public void onCollectArticleListener(int position, int id) {
-                if (tempDataLists.size()>0) {
+                if (tempDataLists.size() > 0) {
                     DatasBean datasBean = tempDataLists.get(position);
                     String url;
                     if (datasBean.isCollect()) {
                         url = UrlConstant.BASEURL + "/lg/uncollect_originId/" + id + "/json";
-                        mPresenter.setCollect(url,position);
+                        mPresenter.setCollect(url, position, datasBean.isCollect());
                     } else {
                         url = UrlConstant.BASEURL + "/lg/collect/" + id + "/json";
-                        mPresenter.setCollect(url,position);
+                        mPresenter.setCollect(url, position, datasBean.isCollect());
                     }
                 }
             }
@@ -221,7 +221,14 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         mPresenter.getTabListInfo(url);
     }
 
-    public void setCollectListener(int position) {
-
+    public void setCollectListener(int position, boolean isCollect) {
+        if (isCollect) {
+            tempDataLists.get(position).setCollect(false);
+            UiTools.showToast("取消收藏");
+        } else {
+            tempDataLists.get(position).setCollect(true);
+            UiTools.showToast("收藏成功");
+        }
+        tabListAdapter.setDatas(tempDataLists, mTlbHomeTab.getSelectedTabPosition(),true);
     }
 }

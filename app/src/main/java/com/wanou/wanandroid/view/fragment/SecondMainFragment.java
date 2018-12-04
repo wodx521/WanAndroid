@@ -8,6 +8,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.wanou.framelibrary.base.BaseMvpFragment;
+import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.bean.ArticleListBean;
 import com.wanou.wanandroid.bean.ChapterListBean;
@@ -108,7 +109,7 @@ public class SecondMainFragment extends BaseMvpFragment<SecondPresenterImpl> imp
         int pageCount = articleListBean.getPageCount();
         List<DatasBean> datas = articleListBean.getDatas();
         tempDatas.addAll(datas);
-        tabListAdapter.setDatas(tempDatas, 0);
+        tabListAdapter.setDatas(tempDatas, 0,false);
         mSrlRefresh.setEnableLoadMore(curPage < pageCount);
 
         mSrlRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
@@ -127,5 +128,33 @@ public class SecondMainFragment extends BaseMvpFragment<SecondPresenterImpl> imp
                 mPresenter.getProjectList(url, id);
             }
         });
+
+        tabListAdapter.setCollectArticleListener(new TabListAdapter.CollectArticleListener() {
+            @Override
+            public void onCollectArticleListener(int position, int id) {
+                if (tempDatas.size() > 0) {
+                    DatasBean datasBean = tempDatas.get(position);
+                    String url;
+                    if (datasBean.isCollect()) {
+                        url = UrlConstant.BASEURL + "/lg/uncollect_originId/" + id + "/json";
+                        mPresenter.setCollect(url, position, datasBean.isCollect());
+                    } else {
+                        url = UrlConstant.BASEURL + "/lg/collect/" + id + "/json";
+                        mPresenter.setCollect(url, position, datasBean.isCollect());
+                    }
+                }
+            }
+        });
+    }
+
+    public void setCollectListener(int position, boolean isCollect) {
+        if (isCollect) {
+            tempDatas.get(position).setCollect(false);
+            UiTools.showToast("取消收藏");
+        } else {
+            tempDatas.get(position).setCollect(true);
+            UiTools.showToast("收藏成功");
+        }
+        tabListAdapter.setDatas(tempDatas, mTlThird.getSelectedTabPosition(),false);
     }
 }
