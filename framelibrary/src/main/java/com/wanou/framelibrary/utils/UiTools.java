@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.support.annotation.StringRes;
@@ -203,6 +204,13 @@ public class UiTools {
     public static View parseLayout(int resLayout, ViewGroup root) {
         LayoutInflater from = LayoutInflater.from(context);
         return from.inflate(resLayout, root, false);
+    }
+
+    public static int getRandomColor() {
+        int red = (int) (Math.random() * 150 + 50);
+        int green = (int) (Math.random() * 150 + 50);
+        int blue = (int) (Math.random() * 150 + 50);
+        return Color.rgb(red, green, blue);
     }
 
 }

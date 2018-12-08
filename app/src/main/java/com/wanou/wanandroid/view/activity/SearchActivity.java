@@ -1,5 +1,6 @@
 package com.wanou.wanandroid.view.activity;
 
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
@@ -194,6 +195,12 @@ public class SearchActivity extends BaseMvpActivity<SearchPresenterImpl> impleme
             textView.setText(name);
             textView.setTextColor(UiTools.getColor(R.color.white_color));
             textView.setBackgroundResource(R.drawable.shape_blue_bg_round20);
+            GradientDrawable bgShape = (GradientDrawable) textView.getBackground();
+            int randomColor = UiTools.getRandomColor();
+            bgShape.setStroke(1, randomColor);
+            bgShape.setCornerRadius(50);
+            textView.setBackground(bgShape);
+            textView.setBackgroundColor(randomColor);
             textView.setPadding(15, 5, 15, 5);
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override

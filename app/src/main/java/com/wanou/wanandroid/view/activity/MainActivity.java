@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.wanou.framelibrary.base.BaseMvpActivity;
 import com.wanou.wanandroid.R;
@@ -27,6 +28,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> {
     private BottomNavigationView mNavigation;
     private FragmentTransaction fragmentTransaction;
     private AppBarLayout mAppBarLayout;
+    private TextView mTvTitle;
     private Bundle bundle = new Bundle();
 
     @Override
@@ -46,6 +48,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> {
         mNavigation = findViewById(R.id.navigation);
         mAppBarLayout = findViewById(R.id.appBarLayout);
         mToolbar = findViewById(R.id.toolbar);
+        mTvTitle = findViewById(R.id.tv_title);
+        mTvTitle.setText(getString(R.string.app_title));
+        mTvTitle.setTextSize(16);
 
         mNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
