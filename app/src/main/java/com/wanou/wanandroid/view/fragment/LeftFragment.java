@@ -10,7 +10,7 @@ import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.bean.SystemBean;
 import com.wanou.wanandroid.constant.UrlConstant;
 import com.wanou.wanandroid.presenter.LeftFragmentPresenterImpl;
-import com.wanou.wanandroid.weight.FlowLayout;
+import com.wanou.wanandroid.weight.AutoChangeRowLayout;
 
 import java.util.List;
 
@@ -19,8 +19,8 @@ import java.util.List;
  * Date on 2018/11/22.
  */
 public class LeftFragment extends BaseMvpFragment<LeftFragmentPresenterImpl> {
-    private FlowLayout mFlLayout1;
-    private FlowLayout mFlLayout2;
+    private AutoChangeRowLayout mFlLayout1;
+    private AutoChangeRowLayout mFlLayout2;
 
     @Override
     protected LeftFragmentPresenterImpl getPresenter() {

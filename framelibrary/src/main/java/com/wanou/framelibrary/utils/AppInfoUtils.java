@@ -6,18 +6,20 @@ import android.content.pm.PackageManager;
 import com.wanou.framelibrary.GlobalApplication;
 
 public class AppInfoUtils {
-
-    private static int getLocalVersion() {
-        int localVersion = 0;
+    private static long getLocalVersion() {
+        long longVersionCode = 0;
         try {
             PackageInfo packageInfo = GlobalApplication.getContext().getPackageManager()
                     .getPackageInfo(GlobalApplication.getContext().getPackageName(), 0);
-            localVersion = packageInfo.versionCode;
-            LogUtils.d("本软件的版本号--" + localVersion);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                longVersionCode = packageInfo.getLongVersionCode();
+            } else {
+                longVersionCode = packageInfo.versionCode;
+            }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return localVersion;
+        return longVersionCode;
     }
 
     /**
@@ -29,7 +31,6 @@ public class AppInfoUtils {
             PackageInfo packageInfo = GlobalApplication.getContext().getPackageManager()
                     .getPackageInfo(GlobalApplication.getContext().getPackageName(), 0);
             localVersionName = packageInfo.versionName;
-            LogUtils.d("本软件的版本号--" + localVersionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

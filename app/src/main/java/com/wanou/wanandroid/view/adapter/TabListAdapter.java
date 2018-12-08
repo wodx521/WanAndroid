@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wanou.framelibrary.base.BaseRecycleViewAdapter;
@@ -92,7 +93,7 @@ public class TabListAdapter extends BaseRecycleViewAdapter {
     static class TabListViewHolder extends RecyclerView.ViewHolder {
         private TextView mTvContentTitle, mTvType, mTvAuthor, mTvClassification,
                 mTvPublishTime;
-        private TextView mTvIsCollect;
+        private ImageView mTvIsCollect;
 
         TabListViewHolder(@NonNull View itemView) {
             super(itemView);

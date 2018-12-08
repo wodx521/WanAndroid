@@ -12,7 +12,7 @@ import com.wanou.framelibrary.okgoutil.OkGoUtils;
 import com.wanou.framelibrary.utils.GsonUtils;
 import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
-import com.wanou.wanandroid.bean.CollectArticleBean;
+import com.wanou.wanandroid.bean.ArticleListBean;
 import com.wanou.wanandroid.view.activity.CollectArticleActivity;
 
 /**
@@ -26,15 +26,15 @@ public class CollectArticlePresenterImpl extends BasePresenterImpl<CollectArticl
         OkGoUtils.getRequest(url, "collect_article", null, new CustomizeStringCallback() {
             @Override
             public GeneralResult getGeneralResult(String result) {
-                return GsonUtils.fromJson(result, new TypeToken<GeneralResult<CollectArticleBean>>() {
+                return GsonUtils.fromJson(result, new TypeToken<GeneralResult<ArticleListBean>>() {
                 }.getType());
             }
 
             @Override
             public void onRequestSuccess(SimpleResponse simpleResponse, GeneralResult generalResult) {
                 if (generalResult != null) {
-                    CollectArticleBean collectArticleBean = (CollectArticleBean) generalResult.data;
-                    mPresenterView.setCollectArticle(collectArticleBean);
+                    ArticleListBean articleListBean = (ArticleListBean) generalResult.data;
+                    mPresenterView.setCollectArticle(articleListBean);
                 } else {
                     if (UiTools.noEmpty(simpleResponse.msg)) {
                         UiTools.showToast(simpleResponse.msg);

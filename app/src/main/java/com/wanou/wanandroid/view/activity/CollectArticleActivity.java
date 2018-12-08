@@ -13,7 +13,8 @@ import com.wanou.framelibrary.base.BaseMvpActivity;
 import com.wanou.framelibrary.base.BaseRecycleViewAdapter;
 import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
-import com.wanou.wanandroid.bean.CollectArticleBean;
+import com.wanou.wanandroid.bean.ArticleListBean;
+import com.wanou.wanandroid.bean.DatasBean;
 import com.wanou.wanandroid.constant.UrlConstant;
 import com.wanou.wanandroid.presenter.CollectArticlePresenterImpl;
 import com.wanou.wanandroid.view.adapter.CollectArticleAdapter;
@@ -30,7 +31,7 @@ public class CollectArticleActivity extends BaseMvpActivity<CollectArticlePresen
     private RecyclerView mRvCollectArticle;
     private SmartRefreshLayout mSrlRefresh;
     private CollectArticleAdapter collectArticleAdapter;
-    private List<CollectArticleBean.DatasBean> tempDataLists = new ArrayList<>();
+    private List<DatasBean> tempDataLists = new ArrayList<>();
     private int page = 0;
     private HttpParams httpParams = new HttpParams();
     private Bundle bundle = new Bundle();
@@ -60,11 +61,11 @@ public class CollectArticleActivity extends BaseMvpActivity<CollectArticlePresen
         mPresenter.getCollectArticle(url);
     }
 
-    public void setCollectArticle(CollectArticleBean collectArticleBean) {
-        int curPage = collectArticleBean.getCurPage();
-        int pageCount = collectArticleBean.getPageCount();
+    public void setCollectArticle(ArticleListBean articleListBean) {
+        int curPage = articleListBean.getCurPage();
+        int pageCount = articleListBean.getPageCount();
         mSrlRefresh.setEnableLoadMore(curPage < pageCount);
-        List<CollectArticleBean.DatasBean> datas = collectArticleBean.getDatas();
+        List<DatasBean> datas = articleListBean.getDatas();
         tempDataLists.addAll(datas);
         collectArticleAdapter.setCollectData(tempDataLists);
 
@@ -99,7 +100,7 @@ public class CollectArticleActivity extends BaseMvpActivity<CollectArticlePresen
             public void onItemClickListener(View view, int position) {
                 if (tempDataLists.size() > 0) {
                     bundle.clear();
-                    CollectArticleBean.DatasBean datasBean = tempDataLists.get(position);
+                    DatasBean datasBean = tempDataLists.get(position);
                     String link = datasBean.getLink();
                     bundle.putString("bannerUrl", link);
 //                    BannerDetailActivity.startActivity(CollectArticleActivity.this, bundle, BannerDetailActivity.class);
@@ -114,9 +115,9 @@ public class CollectArticleActivity extends BaseMvpActivity<CollectArticlePresen
 
     public void setCancelSuccess(int id) {
         UiTools.showToast("取消收藏");
-        Iterator<CollectArticleBean.DatasBean> iterator = tempDataLists.iterator();
+        Iterator<DatasBean> iterator = tempDataLists.iterator();
         while (iterator.hasNext()) {
-            CollectArticleBean.DatasBean next = iterator.next();
+            DatasBean next = iterator.next();
             if (next.getId() == id) {
                 iterator.remove();
             }

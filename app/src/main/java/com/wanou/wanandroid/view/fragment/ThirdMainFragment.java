@@ -162,7 +162,6 @@ public class ThirdMainFragment extends BaseMvpFragment<ThirdPresenterImpl> imple
                     DatasBean datasBean = tempDataLists.get(position);
                     String link = datasBean.getLink();
                     bundle.putString("bannerUrl", link);
-//                    BannerDetailActivity.startActivity(getActivity(), bundle, BannerDetailActivity.class);
                     ActivityOptionsCompat activityOptionsCompat =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, getString(R.string.WebView));
                     BannerDetailActivity.compatStartActivity(getActivity(), bundle, activityOptionsCompat.toBundle(), BannerDetailActivity.class);

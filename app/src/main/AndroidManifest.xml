@@ -42,6 +42,8 @@
         </activity>
         <activity android:name=".view.activity.BannerDetailActivity" />
         <activity android:name=".view.activity.CollectArticleActivity" />
+        <activity android:name=".view.activity.AboutActivity" />
+        <activity android:name=".view.activity.SearchActivity" />
     </application>
 
 </manifest>

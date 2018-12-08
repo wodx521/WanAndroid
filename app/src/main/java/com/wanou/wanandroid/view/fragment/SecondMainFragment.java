@@ -159,7 +159,6 @@ public class SecondMainFragment extends BaseMvpFragment<SecondPresenterImpl> imp
                     DatasBean datasBean = tempDataLists.get(position);
                     String link = datasBean.getLink();
                     bundle.putString("bannerUrl", link);
-//                    BannerDetailActivity.startActivity(getActivity(), bundle, BannerDetailActivity.class);
 
                     ActivityOptionsCompat activityOptionsCompat =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, getString(R.string.WebView));

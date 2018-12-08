@@ -8,17 +8,20 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_is_collect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_collect"
-            android:gravity="center" />
+            android:adjustViewBounds="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:src="@drawable/selector_collect" />
 
         <LinearLayout
             android:layout_width="match_parent"

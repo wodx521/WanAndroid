@@ -1,12 +1,16 @@
 package com.wanou.framelibrary.base;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.WindowManager;
 
 import com.wanou.framelibrary.manager.ActivityManage;
 
@@ -16,6 +20,13 @@ import com.wanou.framelibrary.manager.ActivityManage;
  */
 public abstract class BaseActivity extends AppCompatActivity implements BaseView {
 
+    /**
+     * 带参数开启页面
+     *
+     * @param context 上下文
+     * @param bundle  参数bundle
+     * @param cls     需要开启页面
+     */
     public static void startActivity(Context context, Bundle bundle, Class<?> cls) {
         Intent intent = new Intent(context, cls);
         if (bundle != null) {
@@ -64,7 +75,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        ActivityCompat.finishAffinity(this);
         ActivityCompat.finishAfterTransition(this);
     }
 
@@ -79,5 +89,36 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
     protected void onDestroy() {
         super.onDestroy();
         ActivityManage.getInstance().removeActivity(this);
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void highApiEffects() {
+        getWindow().getDecorView().setFitsSystemWindows(true);
+        //透明状态栏 @顶部
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
+
+    protected void viewGone(View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                view.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    protected void viewVisible(View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                view.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    protected void viewInvisible(View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 }

@@ -11,7 +11,7 @@ import com.wanou.framelibrary.utils.UiTools;
 import com.wanou.wanandroid.R;
 import com.wanou.wanandroid.constant.UrlConstant;
 import com.wanou.wanandroid.presenter.FivePresenterImpl;
-import com.wanou.wanandroid.view.activity.BannerDetailActivity;
+import com.wanou.wanandroid.view.activity.AboutActivity;
 import com.wanou.wanandroid.view.activity.CollectArticleActivity;
 import com.wanou.wanandroid.view.activity.LoginActivity;
 
@@ -59,13 +59,13 @@ public class FiveMainFragment extends BaseMvpFragment<FivePresenterImpl> impleme
             case R.id.tv_collect_article:
                 bundle.clear();
                 CollectArticleActivity.startActivity(getActivity(), bundle, CollectArticleActivity.class);
-
                 break;
             case R.id.tv_about_us:
                 bundle.clear();
                 url = "http://www.wanandroid.com/about";
                 bundle.putString("bannerUrl", url);
-                BannerDetailActivity.startActivity(getActivity(), bundle, BannerDetailActivity.class);
+//                BannerDetailActivity.startActivity(getActivity(), bundle, BannerDetailActivity.class);
+                AboutActivity.startActivity(getActivity(), bundle, AboutActivity.class);
                 break;
             case R.id.bt_exit:
                 url = UrlConstant.BASEURL + "/user/logout/json";

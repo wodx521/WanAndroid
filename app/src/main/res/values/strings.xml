@@ -17,7 +17,14 @@
     <string name="collect_article">收藏文章</string>
     <string name="exit">退出登录</string>
     <string name="cancel_collect">取消收藏</string>
-    <string name="about_us">关于我们</string>
+    <string name="about_us">关于软件</string>
     <string name="WebView">webView</string>
+
+    <string name="version">版本号：</string>
+    <string name="info"><![CDATA[<p>\t\t本App根据大神提供的API接口，使用技术：Okgo + Glide</p>
+    <p>\t\t欢迎大家反馈软件中问题 地址：<a href="https://github.com/wodx521/WanAndroid/issues" target="_blank">https://github.com/wodx521/WanAndroid</a></p>
+    <p>\t\t<a href="http://www.wanandroid.com/index" target="_blank">WanAndroid</a></p>]]></string>
+    <string name="search">搜索</string>
+    <string name="hotkey">热门搜索</string>
 
 </resources>

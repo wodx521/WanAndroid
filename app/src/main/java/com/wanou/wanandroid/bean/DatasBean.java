@@ -13,7 +13,7 @@ public class DatasBean {
      * author : 鸿洋
      * chapterId : 408
      * chapterName : 鸿洋
-     * collect : false
+     * uncollected : false
      * courseId : 13
      * desc :
      * envelopePic :
@@ -22,6 +22,7 @@ public class DatasBean {
      * link : https://mp.weixin.qq.com/s/bNFcDEPuR4-RAMQAyI9T6w
      * niceDate : 2018-11-30
      * origin :
+     * originId :
      * projectLink :
      * publishTime : 1543507200000
      * superChapterId : 408
@@ -47,6 +48,7 @@ public class DatasBean {
     private String link;
     private String niceDate;
     private String origin;
+    private int originId;
     private String projectLink;
     private long publishTime;
     private int superChapterId;
@@ -160,6 +162,14 @@ public class DatasBean {
 
     public void setOrigin(String origin) {
         this.origin = origin;
+    }
+
+    public int getOriginId() {
+        return originId;
+    }
+
+    public void setOriginId(int originId) {
+        this.originId = originId;
     }
 
     public String getProjectLink() {

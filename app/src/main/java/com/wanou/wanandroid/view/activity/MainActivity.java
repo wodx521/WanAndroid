@@ -1,6 +1,8 @@
 package com.wanou.wanandroid.view.activity;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -24,6 +26,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> {
     private FrameLayout mFlContainer;
     private BottomNavigationView mNavigation;
     private FragmentTransaction fragmentTransaction;
+    private AppBarLayout mAppBarLayout;
+    private Bundle bundle = new Bundle();
 
     @Override
     protected MainPresenterImpl getPresenter() {
@@ -40,6 +44,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> {
         mToolbar = findViewById(R.id.toolbar);
         mFlContainer = findViewById(R.id.fl_container);
         mNavigation = findViewById(R.id.navigation);
+        mAppBarLayout = findViewById(R.id.appBarLayout);
+        mToolbar = findViewById(R.id.toolbar);
 
         mNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -48,21 +54,21 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> {
                 String title = menuItem.getTitle().toString();
                 switch (itemId) {
                     case R.id.navigation_home:
-                        addFragment(0,title);
+                        addFragment(0, title);
                         break;
                     case R.id.navigation_project:
-                        addFragment(1,title);
+                        addFragment(1, title);
                         break;
                     case R.id.navigation_no_public:
-                        addFragment(2,title);
+                        addFragment(2, title);
                         break;
                     case R.id.navigation_system:
-                        addFragment(3,title);
+                        addFragment(3, title);
                         break;
                     case R.id.navigation_me:
-                    default:
-                        addFragment(4,title);
+                        addFragment(4, title);
                         break;
+                    default:
                 }
                 return true;
             }
@@ -89,6 +95,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> {
 
     @Override
     protected void initData() {
-
+        mToolbar.inflateMenu(R.menu.toolbar_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                SearchActivity.startActivity(MainActivity.this, bundle, SearchActivity.class);
+                return true;
+            }
+        });
     }
 }

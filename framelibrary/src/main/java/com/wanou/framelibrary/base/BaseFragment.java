@@ -42,4 +42,28 @@ public abstract class BaseFragment extends Fragment implements BaseView{
     }
 
     protected abstract void isHiddenListener(boolean hidden);
+
+    protected void viewGone(View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                view.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    protected void viewVisible(View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                view.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    protected void viewInvisible(View... views) {
+        if (views != null && views.length > 0) {
+            for (View view : views) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
 }

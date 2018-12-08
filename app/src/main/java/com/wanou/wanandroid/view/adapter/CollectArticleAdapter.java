@@ -4,11 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wanou.framelibrary.base.BaseRecycleViewAdapter;
 import com.wanou.wanandroid.R;
-import com.wanou.wanandroid.bean.CollectArticleBean;
+import com.wanou.wanandroid.bean.DatasBean;
 
 import java.util.List;
 
@@ -17,13 +18,13 @@ import java.util.List;
  * Date on 2018/12/3.
  */
 public class CollectArticleAdapter extends BaseRecycleViewAdapter {
-    private List<CollectArticleBean.DatasBean> mDatas;
+    private List<DatasBean> mDatas;
 
     public CollectArticleAdapter(Context context) {
         super(context);
     }
 
-    public void setCollectData(List<CollectArticleBean.DatasBean> datas) {
+    public void setCollectData(List<DatasBean> datas) {
         this.mDatas = datas;
         notifyDataSetChanged();
     }
@@ -41,7 +42,7 @@ public class CollectArticleAdapter extends BaseRecycleViewAdapter {
     @Override
     protected void bindClickListener(RecyclerView.ViewHolder viewHolder, int position) {
         CollectArticleViewHolder collectArticleViewHolder = (CollectArticleViewHolder) viewHolder;
-        CollectArticleBean.DatasBean datasBean = mDatas.get(position);
+        DatasBean datasBean = mDatas.get(position);
 
         collectArticleViewHolder.mTvAuthor.setText(datasBean.getAuthor());
         collectArticleViewHolder.mTvContentTitle.setText(datasBean.getTitle());
@@ -73,7 +74,7 @@ public class CollectArticleAdapter extends BaseRecycleViewAdapter {
         private TextView mTvContentTitle;
         private TextView mTvClassification;
         private TextView mTvType;
-        private TextView mTvIsCollect;
+        private ImageView mTvIsCollect;
 
         CollectArticleViewHolder(@NonNull View itemView) {
             super(itemView);

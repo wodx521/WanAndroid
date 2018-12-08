@@ -12,7 +12,7 @@
         android:padding="5dp"
         android:scrollbars="none">
 
-        <com.wanou.wanandroid.weight.FlowLayout
+        <com.wanou.wanandroid.weight.AutoChangeRowLayout
             android:id="@+id/fl_layout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -32,7 +32,7 @@
         android:padding="5dp"
         android:scrollbars="none">
 
-        <com.wanou.wanandroid.weight.FlowLayout
+        <com.wanou.wanandroid.weight.AutoChangeRowLayout
             android:id="@+id/fl_layout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

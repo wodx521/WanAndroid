@@ -147,17 +147,12 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
         tabSelect(tab);
     }
 
-
     public void setTabSuccess(TabListBean tabListBean) {
         int selectedTabPosition = mTlbHomeTab.getSelectedTabPosition();
         List<DatasBean> datas = tabListBean.getDatas();
         tempDataLists.addAll(datas);
         tabListAdapter.setDatas(tempDataLists, selectedTabPosition, true);
-        if (tabListBean.getCurPage() == tabListBean.getPageCount()) {
-            mSrlRefresh.setEnableLoadMore(false);
-        } else {
-            mSrlRefresh.setEnableLoadMore(true);
-        }
+        mSrlRefresh.setEnableLoadMore(tabListBean.getCurPage()<tabListBean.getPageCount());
         mSrlRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
@@ -218,8 +213,6 @@ public class FirstMainFragment extends BaseMvpFragment<FirstPresenterImpl> imple
                     DatasBean datasBean = tempDataLists.get(position);
                     String link = datasBean.getLink();
                     bundle.putString("bannerUrl", link);
-//                    BannerDetailActivity.startActivity(getActivity(), bundle, BannerDetailActivity.class);
-
                     ActivityOptionsCompat activityOptionsCompat =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, getString(R.string.WebView));
                     BannerDetailActivity.compatStartActivity(getActivity(), bundle, activityOptionsCompat.toBundle(), BannerDetailActivity.class);
