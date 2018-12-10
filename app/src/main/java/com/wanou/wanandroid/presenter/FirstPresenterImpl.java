@@ -114,7 +114,7 @@ public class FirstPresenterImpl extends BasePresenterImpl<FirstMainFragment> {
             @Override
             public void onRequestSuccess(SimpleResponse simpleResponse, GeneralResult generalResult) {
                 if (generalResult != null) {
-                    mPresenterView.setCollectListener(position,isCollect);
+                    mPresenterView.setCollectListener(position, isCollect);
                 } else {
                     if (UiTools.noEmpty(simpleResponse.msg)) {
                         UiTools.showToast(simpleResponse.msg);

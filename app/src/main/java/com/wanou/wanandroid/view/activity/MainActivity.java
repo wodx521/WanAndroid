@@ -78,7 +78,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenterImpl> {
                 return true;
             }
         });
+        mNavigation.setItemIconTintList(null);
         mNavigation.setSelectedItemId(R.id.navigation_home);
+
     }
 
     private void addFragment(int position, String title) {
